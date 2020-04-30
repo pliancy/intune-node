@@ -1,0 +1,52 @@
+{
+  "name": "node-intune",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "lint": "eslint '.'",
+    "test": "npm run lint && jest",
+    "docs": "rimraf ./docs && typedoc src/ --out docs --mode modules --module commonjs --target es6 --excludePrivate && touch ./docs/.nojekyll && gh-pages -d docs -t",
+    "build": "npm run clean && npm run test && tsc",
+    "prepare": "npm run build",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "keywords": [],
+  "author": "Santese Smith",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/santese/node-intune.git"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@types/qs": "^6.9.1",
+    "got": "^11.0.2"
+  },
+  "devDependencies": {
+    "@types/got": "^9.6.10",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.4",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard-with-typescript": "^16.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "gh-pages": "^2.2.0",
+    "jest": "^25.5.2",
+    "lint-staged": "^10.2.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.4.0",
+    "typedoc": "^0.17.6",
+    "typescript": "^3.8.3"
+  }
+}
