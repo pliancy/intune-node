@@ -1,2 +1,2 @@
 # node-intune
-Typescript wrapper for the intune
+Typescript wrapper for Microsoft Intune
