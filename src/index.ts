@@ -39,11 +39,11 @@ class Intune {
   constructor(_config: IntuneConfig) {
     this.config = _config
     this.domain = `https://graph.microsoft.com/beta`
-    this.accessToken = ''
+    this.accessToken = ""
     this.reqHeaders = {
       authorization: `Bearer ${this.accessToken}`,
-      'content-type': 'application/json',
-      accept: 'application/json'
+      "content-type": "application/json",
+      accept: "application/json",
     }
   }
 
@@ -52,50 +52,45 @@ class Intune {
       `${this.domain}/deviceManagement/managedDevices?$top=999`,
       {
         method: "GET",
-        headers: this.reqHeaders
+        headers: this.reqHeaders,
       }
     )
     const resbody = JSON.parse(res.body)
     return resbody.value
-  };
+  }
 
   async getAzureAdDevices(): Promise<object[]> {
-    let res = await this._IntuneRequest(
-      `${this.domain}/devices?$top=999`,
-      {
-        method: "GET",
-        headers: this.reqHeaders
-      }
-    )
+    let res = await this._IntuneRequest(`${this.domain}/devices?$top=999`, {
+      method: "GET",
+      headers: this.reqHeaders,
+    })
     const resbody = JSON.parse(res.body)
     return resbody.value
-  };
-
-
+  }
 
   async getManagedApps(): Promise<object[]> {
     let res = await this._IntuneRequest(
       `${this.domain}/deviceAppManagement/mobileApps?$top=999`,
       {
         method: "GET",
-        headers: this.reqHeaders
+        headers: this.reqHeaders,
       }
     )
     const resbody = JSON.parse(res.body)
     return resbody.value
-  };
+  }
 
   async getDeviceConfigurations(): Promise<object[]> {
     let res = await this._IntuneRequest(
       `${this.domain}/deviceManagement/deviceConfigurations?$top=999`,
       {
         method: "GET",
-        headers: this.reqHeaders
+        headers: this.reqHeaders,
       }
     )
     const resbody = JSON.parse(res.body)
     return resbody.value
-  };
+  }
 
   async createDeviceConfiguration(postBody: object): Promise<object> {
     let res = await this._IntuneRequest(
@@ -103,12 +98,12 @@ class Intune {
       {
         method: "POST",
         headers: this.reqHeaders,
-        body: JSON.stringify(postBody)
+        body: JSON.stringify(postBody),
       }
     )
     const resbody = JSON.parse(res.body)
     return resbody
-  };
+  }
 
   async createWin32App(postBody: object): Promise<object> {
     try {
@@ -117,7 +112,7 @@ class Intune {
         {
           method: "POST",
           headers: this.reqHeaders,
-          body: JSON.stringify(postBody)
+          body: JSON.stringify(postBody),
         }
       )
 
@@ -154,7 +149,7 @@ class Intune {
         {
           method: "POST",
           headers: this.reqHeaders,
-          body: JSON.stringify(postBody)
+          body: JSON.stringify(postBody),
         }
       )
 
@@ -171,7 +166,7 @@ class Intune {
   ): Promise<string> {
     let azureStorageUri: string = ""
     let loop = true
-    const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms))
+    const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms))
     try {
       while (loop) {
         let res = await this._IntuneRequest(
@@ -253,7 +248,7 @@ class Intune {
         {
           method: "POST",
           headers: this.reqHeaders,
-          body: JSON.stringify(postBody)
+          body: JSON.stringify(postBody),
         }
       )
       return res.body
@@ -262,10 +257,7 @@ class Intune {
     }
   }
 
-  async commitApp(
-    appId: string,
-    contentVersionId: number,
-  ): Promise<object> {
+  async commitApp(appId: string, contentVersionId: number): Promise<object> {
     try {
       let res = await this._IntuneRequest(
         `${this.domain}/deviceAppManagement/mobileApps/${appId}`,
@@ -275,7 +267,7 @@ class Intune {
           body: JSON.stringify({
             "@odata.type": "#microsoft.graph.win32LobApp",
             committedContentVersion: `${contentVersionId}`,
-          })
+          }),
         }
       )
       return res.body
@@ -290,7 +282,7 @@ class Intune {
     fileId: string
   ) {
     let loop = true
-    const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms))
+    const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms))
     try {
       while (loop) {
         let res = await this._IntuneRequest(
@@ -312,7 +304,7 @@ class Intune {
       throw err
     }
     return
-  };
+  }
 
   async uploadWin32app(
     appCreationBody: object,
@@ -330,17 +322,26 @@ class Intune {
       const fileInfoRes: any = await this.createContentVersion(appId)
 
       const contentVersionId = fileInfoRes.id
-      const fileUploadRes: any = await this.createFileUpload(appId, contentVersionId, fileInfoBody)
+      const fileUploadRes: any = await this.createFileUpload(
+        appId,
+        contentVersionId,
+        fileInfoBody
+      )
 
       const fileId = fileUploadRes.id
       console.log(chalk.bold.hex("#71c6e5")("Waiting for Storage URI"))
-      const azureStorageUri = await this.getAzureStorageUri(appId, contentVersionId, fileId)
+      const azureStorageUri = await this.getAzureStorageUri(
+        appId,
+        contentVersionId,
+        fileId
+      )
       const fileSize = fileInfoBody.size
 
       const blobUploadRes = await this.uploadToAzureBlob(
         azureStorageUri,
         file,
-        fileSize)
+        fileSize
+      )
 
       const commitFileRes = await this.commitFileUpload(
         appId,
@@ -348,7 +349,9 @@ class Intune {
         fileId,
         encryptionBody
       )
-      console.log(chalk.bold.hex("#71c6e5")("Waiting for Successful File Upload Status"))
+      console.log(
+        chalk.bold.hex("#71c6e5")("Waiting for Successful File Upload Status")
+      )
 
       const fileUploadStatusRes = await this.getFileUploadStatus(
         appId,
@@ -356,33 +359,27 @@ class Intune {
         fileId
       )
 
-      const commitAppRes = await this.commitApp(
-        appId,
-        contentVersionId,
-      )
+      const commitAppRes = await this.commitApp(appId, contentVersionId)
       return chalk.bold.hex("#008000")("App Creation Successful")
-
     } catch (err) {
       throw err
     }
-
-  };
-
+  }
 
   private async _authenticate(): Promise<string> {
     let res = await got(
       `https://login.microsoftonline.com/${this.config.tenantId}/oauth2/v2.0/token`,
       {
-        method: 'post',
+        method: "post",
         headers: {
-          'content-type': 'application/x-www-form-urlencoded'
+          "content-type": "application/x-www-form-urlencoded",
         },
         body: qs.stringify({
-          grant_type: 'client_credentials',
-          scope: 'https://graph.microsoft.com/.default',
+          grant_type: "client_credentials",
+          scope: "https://graph.microsoft.com/.default",
           client_id: this.config.clientId,
-          client_secret: this.config.clientSecret
-        })
+          client_secret: this.config.clientSecret,
+        }),
       }
     )
     let body: IOAuthResponse = JSON.parse(res.body)
