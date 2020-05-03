@@ -13,9 +13,9 @@ npm install microsoft-intune
 You must import the package and pass in the `clientId` and `clientSecret` from AzureAd to the constructor:
 
 ```javascript
-var Intune = require('microsoft-intune')
+const Intune = require('microsoft-intune')
 
-var  intune = new Intune({
+const intune = new Intune({
         clientId: "3d3...."
         clientSecret: "8dj..."
         tenantId: "33dd..."
@@ -47,7 +47,7 @@ await getDeviceConfigurations()
 ### Create Device Configuration
 
 ```javascript
-var postBody = {
+const postBody = {
   "@odata.type": "#microsoft.graph.windows10GeneralConfiguration",
   "description": "Disables sleep when lid is closed",
   "displayName": "Power - Disable Sleep for Lid Close",
@@ -60,7 +60,7 @@ await intune.createDeviceConfiguration(postBody)
 ### Create Office Suite App
 
 ```javascript
-var postBody = { 
+const postBody = { 
   "@odata.type": "#microsoft.graph.officeSuiteApp",
   "displayName": "Office 365",
   "description": "Office 365 for Windows 10",
@@ -112,7 +112,7 @@ await createApp(postBody)
 This function requires 3 json objects . Some of the info for these objects is in the detection.xml, that's located in the extracted .intunewin file. You will also need to extract the unencrypted .intunewin file as that is the file to be uploaded. 
 
 ```javascript
-var appcreationBody = {
+const appcreationBody = {
   "@odata.type": "#microsoft.graph.win32LobApp",
   "displayName": "App",
   "description": "",
@@ -177,7 +177,7 @@ var appcreationBody = {
   ]
 }
 
-var encryptionBody = {
+const encryptionBody = {
   "fileEncryptionInfo": {
     "fileDigestAlgorithm": "SHA256",
     "encryptionKey": "BKu4^YNmrrfG74yT3R&qAly",
@@ -189,7 +189,7 @@ var encryptionBody = {
   }
 }
 
-var fileInfoBody= {
+const fileInfoBody= {
   "@odata.type": "#microsoft.graph.mobileAppContentFile",
   "manifest": null,
   "size": 3332,
@@ -199,5 +199,5 @@ var fileInfoBody= {
 }
 
 
-await createWin32app( appCreationBody, encryptionBody, fileInfoBody, unencryptedFile) 
+await createWin32app(appCreationBody, encryptionBody, fileInfoBody, unencryptedFile) 
 ```
