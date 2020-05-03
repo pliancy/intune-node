@@ -68,7 +68,7 @@ class Intune {
     return resbody.value
   }
 
-  async getManagedApps(): Promise<object[]> {
+  async getApps(): Promise<object[]> {
     let res = await this._IntuneRequest(
       `${this.domain}/deviceAppManagement/mobileApps?$top=999`,
       {
@@ -306,7 +306,7 @@ class Intune {
     return
   }
 
-  async uploadWin32app(
+  async createWin32app(
     appCreationBody: object,
     encryptionBody: object,
     fileInfoBody: any,
