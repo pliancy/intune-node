@@ -109,7 +109,7 @@ await createApp(postBody)
 
 ### Create and Upload Win32 App from Stream
 
-This function requires 3 json objects . Some of the info for these objects is in the detection.xmlthat's located in the extracted .intunewin file. You will also need to extract the unencrypted .intunewin file as that is the file to be uploaded. 
+This function requires 3 json objects . Some of the info for these objects is in the detection.xml, that's located in the extracted .intunewin file. You will also need to extract the unencrypted .intunewin file as that is the file to be uploaded. 
 
 ```javascript
 var appcreationBody = {
