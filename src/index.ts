@@ -105,7 +105,7 @@ class Intune {
     return resbody
   }
 
-  async createWin32App(postBody: object): Promise<object> {
+  async createApp(postBody: object): Promise<object> {
     try {
       let res = await this._IntuneRequest(
         `${this.domain}/deviceAppManagement/mobileApps`,
@@ -182,7 +182,7 @@ class Intune {
           azureStorageUri = resBody.azureStorageUri
           loop = false
         } else {
-          await delay(2000)
+          await delay(1000)
         }
       }
     } catch (err) {
@@ -297,7 +297,7 @@ class Intune {
         if (resBody.uploadState === "commitFileSuccess") {
           loop = false
         } else {
-          await delay(2000)
+          await delay(1000)
         }
       }
     } catch (err) {
@@ -315,7 +315,7 @@ class Intune {
     const arr: any = []
 
     try {
-      const appCreationRes: any = await this.createWin32App(appCreationBody)
+      const appCreationRes: any = await this.createApp(appCreationBody)
 
       const appId = appCreationRes.id
 
