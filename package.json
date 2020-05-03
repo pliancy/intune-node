@@ -1,5 +1,5 @@
 {
-  "name": "node-intune",
+  "name": "intune-node",
   "version": "0.0.0",
   "description": "",
   "main": "./lib/index.js",
@@ -27,7 +27,11 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "@azure/storage-blob": "^12.1.1",
+    "@types/cli-progress": "^3.4.2",
     "@types/qs": "^6.9.1",
+    "chalk": "^4.0.0",
+    "cli-progress": "^3.8.1",
     "got": "^11.0.2"
   },
   "devDependencies": {
