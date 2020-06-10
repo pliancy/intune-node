@@ -220,7 +220,7 @@ class Intune {
         )
         const resBody = await JSON.parse(res.body)
         azureStorageUri = resBody.azureStorageUri
-        if (typeof azureStorageUri !== 'undefined') {
+        if (azureStorageUri) {
           loop = false
         } else {
           await delay(1000)
