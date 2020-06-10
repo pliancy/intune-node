@@ -48,65 +48,86 @@ class Intune {
     }
   }
 
+  /* eslint-disable no-useless-catch */
+
   async getIntuneDevices (): Promise<object[]> {
-    const res = await this._IntuneRequest(
-      `${this.domain}/deviceManagement/managedDevices?$top=999`,
-      {
-        method: 'GET',
-        headers: this.reqHeaders
-      }
-    )
-    const resbody = JSON.parse(res.body)
-    return resbody.value
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
   }
 
   async getAzureAdDevices (): Promise<object[]> {
-    const res = await this._IntuneRequest(`${this.domain}/devices?$top=999`, {
-      method: 'GET',
-      headers: this.reqHeaders
-    })
-    const resbody = JSON.parse(res.body)
-    return resbody.value
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/devices?$top=999`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
   }
 
   async getApps (): Promise<object[]> {
-    const res = await this._IntuneRequest(
-      `${this.domain}/deviceAppManagement/mobileApps?$top=999`,
-      {
-        method: 'GET',
-        headers: this.reqHeaders
-      }
-    )
-    const resbody = JSON.parse(res.body)
-    return resbody.value
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
   }
 
   async getDeviceConfigurations (): Promise<object[]> {
-    const res = await this._IntuneRequest(
-      `${this.domain}/deviceManagement/deviceConfigurations?$top=999`,
-      {
-        method: 'GET',
-        headers: this.reqHeaders
-      }
-    )
-    const resbody = JSON.parse(res.body)
-    return resbody.value
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceConfigurations?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
   }
 
   async createDeviceConfiguration (postBody: object): Promise<object> {
-    const res = await this._IntuneRequest(
-      `${this.domain}/deviceManagement/deviceConfigurations`,
-      {
-        method: 'POST',
-        headers: this.reqHeaders,
-        body: JSON.stringify(postBody)
-      }
-    )
-    const resbody = JSON.parse(res.body)
-    return resbody
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceConfigurations`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
   }
 
-  /* eslint-disable no-useless-catch */
   async createApp (postBody: object): Promise<object> {
     try {
       const res = await this._IntuneRequest(
