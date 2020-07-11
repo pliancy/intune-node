@@ -244,7 +244,7 @@ class Intune {
         )
         const resBody = await JSON.parse(res.body)
         azureStorageUri = resBody.azureStorageUri
-        if (typeof azureStorageUri !== 'undefined') {
+        if (azureStorageUri !== null) {
           loop = false
         } else {
           await delay(1000)
@@ -478,7 +478,7 @@ class Intune {
   private async _IntuneRequest (url: string, options: any): Promise<any> {
     if (typeof this.config.authentication === 'object') {
       try {
-        if (typeof this.accessToken === 'undefined') {
+        if (this.accessToken === '') {
           const token = await this._authenticate()
           if (typeof token === 'string') {
             options.headers.Authorization = `Bearer ${token}`
@@ -502,7 +502,12 @@ class Intune {
       }
     } else if (typeof this.config.authentication === 'string') {
       try {
-        options.headers.Authorization = `Bearer ${this.config.authentication}`
+        if (this.accessToken === '') {
+          options.headers.Authorization = `Bearer ${this.config.authentication}`
+        } else {
+          this.accessToken = this.config.authentication
+          options.headers.Authorization = `Bearer ${this.accessToken}`
+        }
         const res = await got(url, options)
         return res
       } catch (err) {
