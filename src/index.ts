@@ -15,7 +15,7 @@ import {
  */
 interface IntuneConfig {
   tenantId: string
-  authentication: ClientAuth | string
+  authentication: ClientAuth | BearerAuth
 }
 
 interface ClientAuth {
@@ -23,6 +23,9 @@ interface ClientAuth {
   clientSecret: string
 }
 
+interface BearerAuth {
+  bearerToken: string
+}
 interface IOAuthResponse {
   token_type: string
   expires_in: string
@@ -452,8 +455,16 @@ class Intune {
     }
   }
 
+  private readonly isBearerAuth = (arg: any): arg is BearerAuth => {
+    return arg.BearerAuth !== undefined
+  }
+
+  private readonly isClientAuth = (arg: any): arg is ClientAuth => {
+    return arg.ClientAuth !== undefined
+  }
+
   private async _authenticate (): Promise<string | undefined> {
-    if (typeof this.config.authentication === 'object') {
+    if (this.isClientAuth(this.config.authentication)) {
       const res = await got(
         `https://login.microsoftonline.com/${this.config.tenantId}/oauth2/v2.0/token`,
         {
@@ -476,7 +487,7 @@ class Intune {
   }
 
   private async _IntuneRequest (url: string, options: any): Promise<any> {
-    if (typeof this.config.authentication === 'object') {
+    if (this.isClientAuth(this.config.authentication)) {
       try {
         if (this.accessToken === '') {
           const token = await this._authenticate()
@@ -487,7 +498,6 @@ class Intune {
           options.headers.Authorization = `Bearer ${this.accessToken}`
         }
         const res = await got(url, options)
-
         return res
       } catch (err) {
         if (err.statusCode === 401) {
@@ -500,19 +510,19 @@ class Intune {
         }
         throw err
       }
-    } else if (typeof this.config.authentication === 'string') {
+    } else if (this.isBearerAuth(this.config.authentication)) {
       try {
         if (this.accessToken === '') {
-          options.headers.Authorization = `Bearer ${this.config.authentication}`
+          options.headers.Authorization = `Bearer ${this.config.authentication.bearerToken}`
         } else {
-          this.accessToken = this.config.authentication
+          this.accessToken = this.config.authentication.bearerToken
           options.headers.Authorization = `Bearer ${this.accessToken}`
         }
         const res = await got(url, options)
         return res
       } catch (err) {
         if (err.statusCode === 401) {
-          options.headers.Authorization = `Bearer ${this.config.authentication}`
+          options.headers.Authorization = `Bearer ${this.config.authentication.bearerToken}`
           const res = await got(url, options)
           return res
         }
