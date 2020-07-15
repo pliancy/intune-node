@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import got from 'got'
 import qs from 'qs'
 import {
@@ -374,7 +373,7 @@ class Intune {
     encryptionBody: object,
     fileInfoBody: any,
     file: any
-  ): Promise<string> {
+  ): Promise<object> {
     try {
       const appCreationRes: any = await this.createApp(appCreationBody)
 
@@ -409,7 +408,7 @@ class Intune {
       await this.getFileUploadStatus(appId, contentVersionId, fileId)
 
       await this.commitApp(appId, contentVersionId)
-      return chalk.bold.hex('#008000')('App Creation Successful')
+      return appCreationRes
     } catch (err) {
       throw err
     }
@@ -455,12 +454,12 @@ class Intune {
     }
   }
 
-  private readonly isBearerAuth = (arg: any): arg is BearerAuth => {
-    return arg.BearerAuth !== undefined
+  isClientAuth = (e: ClientAuth | BearerAuth): e is ClientAuth => {
+    return (e as ClientAuth).clientId !== undefined
   }
 
-  private readonly isClientAuth = (arg: any): arg is ClientAuth => {
-    return arg.ClientAuth !== undefined
+  isBearerAuth = (e: ClientAuth | BearerAuth): e is BearerAuth => {
+    return (e as BearerAuth).bearerToken !== undefined
   }
 
   private async _authenticate (): Promise<string | undefined> {
@@ -513,8 +512,6 @@ class Intune {
     } else if (this.isBearerAuth(this.config.authentication)) {
       try {
         if (this.accessToken === '') {
-          options.headers.Authorization = `Bearer ${this.config.authentication.bearerToken}`
-        } else {
           this.accessToken = this.config.authentication.bearerToken
           options.headers.Authorization = `Bearer ${this.accessToken}`
         }

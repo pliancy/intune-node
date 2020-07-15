@@ -10,19 +10,40 @@ You can install the package with the following command:
 npm install microsoft-intune
 ```
 
-You must import the package and pass in the `clientId` and `clientSecret` from AzureAd to the constructor:
+Import the package 
 
 ```javascript
 const Intune = require('microsoft-intune')
 
-const intune = new Intune({
-        clientId: "3d3...."
-        clientSecret: "8dj..."
-        tenantId: "33dd..."
-      })
 ```
 
 <hr>
+Client ID and Client Secret Auth:
+
+```javascript
+  const intune = new Intune({
+    authentication: {
+      clientId: '',
+      clientSecret: ''
+    },
+    tenantId: ''
+  })
+```
+
+
+
+Bearer Token Auth:
+
+```javascript
+  const intune = new Intune({
+    authentication: {
+      bearerToken: ''
+    },
+    tenantId: ''
+  })
+```
+
+
 
 ## Example Usage
 
@@ -109,95 +130,93 @@ await createApp(postBody)
 
 ### Create and Upload Win32 App from Stream
 
-This function requires 3 json objects . Some of the info for these objects is in the detection.xml, that's located in the extracted .intunewin file. You will also need to extract the unencrypted .intunewin file as that is the file to be uploaded. 
+This function requires 3 json objects and the unencrypted .intunewin file . Some of the info for these objects is in the detection.xml, that's located in the extracted .intunewin file. You can also use each of the functions that this function calls individually to get more control on logging. 
 
 ```javascript
 const appcreationBody = {
-  "@odata.type": "#microsoft.graph.win32LobApp",
-  "displayName": "App",
-  "description": "",
-  "publisher": "Publisher",
-  "isFeatured": true,
-  "privacyInformationUrl": "",
-  "informationUrl": null,
-  "owner": "",
-  "developer": "",
-  "notes": "",
-  "fileName": "app.intunewin",
-  "installCommandLine": "install.cmd",
-  "uninstallCommandLine": "uninstall.cmd",
-  "applicableArchitectures": "x64",
-  "minimumFreeDiskSpaceInMB": null,
-  "minimumMemoryInMB": null,
-  "minimumNumberOfProcessors": null,
-  "minimumCpuSpeedInMHz": null,
-  "msiInformation": null,
-  "setupFilePath": "app.exe",
-  "largeIcon": {
-    "type": "image/png",
-    "value": "keejejejejenenbejdejdn..."
+  '@odata.type': '#microsoft.graph.win32LobApp',
+  displayName: 'App',
+  description: '',
+  publisher: 'Publisher',
+  isFeatured: true,
+  privacyInformationUrl: '',
+  informationUrl: null,
+  owner: '',
+  developer: '',
+  notes: '',
+  fileName: 'app.intunewin',
+  installCommandLine: 'install.cmd',
+  uninstallCommandLine: 'uninstall.cmd',
+  applicableArchitectures: 'x64',
+  minimumFreeDiskSpaceInMB: null,
+  minimumMemoryInMB: null,
+  minimumNumberOfProcessors: null,
+  minimumCpuSpeedInMHz: null,
+  msiInformation: null,
+  setupFilePath: 'app.exe',
+  largeIcon: {
+    type: 'image/png',
+    value: 'keejejejejenenbejdejdn...'
   },
-  "minimumSupportedOperatingSystem": {
-    "v8_0": false,
-    "v8_1": false,
-    "v10_0": false,
-    "v10_1607": true,
-    "v10_1703": false,
-    "v10_1709": false,
-    "v10_1803": false,
-    "v10_1809": false,
-    "v10_1903": false
+  minimumSupportedOperatingSystem: {
+    v8_0: false,
+    v8_1: false,
+    v10_0: false,
+    v10_1607: true,
+    v10_1703: false,
+    v10_1709: false,
+    v10_1803: false,
+    v10_1809: false,
+    v10_1903: false
   },
-  "detectionRules": [
+  detectionRules: [
     {
-      "@odata.type": "#microsoft.graph.win32LobAppFileSystemDetection",
-      "path": "%ProgramFiles%\\App",
-      "fileOrFolderName": "App.exe",
-      "check32BitOn64System": false,
-      "detectionType": "exists",
-      "operator": "notConfigured",
-      "detectionValue": null
+      '@odata.type': '#microsoft.graph.win32LobAppFileSystemDetection',
+      path: '%ProgramFiles%\\App',
+      fileOrFolderName: 'App.exe',
+      check32BitOn64System: false,
+      detectionType: 'exists',
+      operator: 'notConfigured',
+      detectionValue: null
     }
   ],
-  "requirementRules": [
-  ],
-  "installExperience": {
-    "runAsAccount": "system",
-    "deviceRestartBehavior": "suppress"
+  requirementRules: [],
+  installExperience: {
+    runAsAccount: 'system',
+    deviceRestartBehavior: 'suppress'
   },
-  "returnCodes": [
+  returnCodes: [
     {
-      "returnCode": 0,
-      "type": "success"
+      returnCode: 0,
+      type: 'success'
     },
     {
-      "returnCode": 1,
-      "type": "failed"
+      returnCode: 1,
+      type: 'failed'
     }
   ]
 }
 
 const encryptionBody = {
-  "fileEncryptionInfo": {
-    "fileDigestAlgorithm": "SHA256",
-    "encryptionKey": "BKu4^YNmrrfG74yT3R&qAly",
-    "initializationVector": "BKu4^YNmrrfG74yT3R&qAly",
-    "fileDigest": "BKu4^YNmrrfG74yT3R&qAly",
-    "mac": "BKu4^YNmrrfG74yT3R&qAly",
-    "profileIdentifier": "ProfileVersion1",
-    "macKey": "BKu4^YNmrrfG74yT3R&qAly"
+  fileEncryptionInfo: {
+    fileDigestAlgorithm: 'SHA256',
+    encryptionKey: 'BKu4^YNmrrfG74yT3R&qAly',
+    initializationVector: 'BKu4^YNmrrfG74yT3R&qAly',
+    fileDigest: 'BKu4^YNmrrfG74yT3R&qAly',
+    mac: 'BKu4^YNmrrfG74yT3R&qAly',
+    profileIdentifier: 'ProfileVersion1',
+    macKey: 'BKu4^YNmrrfG74yT3R&qAly'
   }
 }
 
-const fileInfoBody= {
-  "@odata.type": "#microsoft.graph.mobileAppContentFile",
-  "manifest": null,
-  "size": 3332,
-  "name": "app.intunewin",
-  "sizeEncrypted": 3993,
-  "isDependency": false
+const fileInfoBody = {
+  '@odata.type': '#microsoft.graph.mobileAppContentFile',
+  manifest: null,
+  size: 3332,
+  name: 'app.intunewin',
+  sizeEncrypted: 3993,
+  isDependency: false
 }
-
 
 await createWin32app(appCreationBody, encryptionBody, fileInfoBody, unencryptedFile) 
 ```
