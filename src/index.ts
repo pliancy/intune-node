@@ -1,6 +1,3 @@
-
-import Progress from 'cli-progress'
-import chalk from 'chalk'
 import got from 'got'
 import qs from 'qs'
 import {
@@ -16,11 +13,18 @@ import {
  * @interface IntuneConfig
  */
 interface IntuneConfig {
-  clientId: string
-  clientSecret: string
   tenantId: string
+  authentication: ClientAuth | BearerAuth
 }
 
+interface ClientAuth {
+  clientId: string
+  clientSecret: string
+}
+
+interface BearerAuth {
+  bearerToken: string
+}
 interface IOAuthResponse {
   token_type: string
   expires_in: string
@@ -37,7 +41,7 @@ class Intune {
   accessToken: string
   reqHeaders: any
 
-  constructor(_config: IntuneConfig) {
+  constructor (_config: IntuneConfig) {
     this.config = _config
     this.domain = 'https://graph.microsoft.com/beta'
     this.accessToken = ''
@@ -165,7 +169,7 @@ class Intune {
       )
       const resBody = JSON.parse(res.body)
       resArray.push(resBody)
-      const appId = resBody.id
+      const appId: string = resBody.id
 
       definitionValues.map(async e => {
         const res = await this._IntuneRequest(
@@ -229,7 +233,8 @@ class Intune {
   ): Promise<string> {
     let azureStorageUri: string = ''
     let loop = true
-    const delay = async (ms: any): Promise<object> => await new Promise(resolve => setTimeout(resolve, ms))
+    const delay = async (ms: any): Promise<object> =>
+      await new Promise(resolve => setTimeout(resolve, ms))
     try {
       while (loop) {
         const res = await this._IntuneRequest(
@@ -241,7 +246,7 @@ class Intune {
         )
         const resBody = await JSON.parse(res.body)
         azureStorageUri = resBody.azureStorageUri
-        if (azureStorageUri) {
+        if (azureStorageUri !== null) {
           loop = false
         } else {
           await delay(1000)
@@ -256,7 +261,8 @@ class Intune {
   async uploadToAzureBlob (
     azureStorageUri: string,
     file: any,
-    fileSize: number
+    fileSize: number,
+    statusCallback?: any
   ): Promise<Object> {
     // Parse azureStorageUri
     let bufferSize: number = 1 * 1024
@@ -277,24 +283,15 @@ class Intune {
     const containerClient = blobServiceClient.getContainerClient(blobContainer)
     const blockBlobClient = containerClient.getBlockBlobClient(blobName)
 
-    const bar = new Progress.SingleBar(
-      {
-        format: `Uploading ${chalk.bold.hex('#71c6e5')('Package')} ${chalk.hex(
-          '#7F4BAE'
-        )('{bar}')} {percentage}%`
-      },
-      Progress.Presets.shades_grey
-    )
-    bar.start(fileSize, 0)
-
     const uploadBlobResponse = await blockBlobClient.uploadStream(
       file,
       bufferSize,
       20,
-      { onProgress: (ev: any) => bar.update(ev.loadedBytes) }
+      {
+        onProgress: (ev: any) =>
+          statusCallback(fileSize, ev.loadedBytes) ?? null
+      }
     )
-    bar.stop()
-    console.log(chalk.bold.hex('#008000')('File Uploaded'))
     return uploadBlobResponse
   }
 
@@ -344,7 +341,8 @@ class Intune {
     fileId: string
   ): Promise<string> {
     let loop = true
-    const delay = async (ms: any): Promise<object> => await new Promise(resolve => setTimeout(resolve, ms))
+    const delay = async (ms: any): Promise<object> =>
+      await new Promise(resolve => setTimeout(resolve, ms))
     let uploadState = ''
     try {
       while (loop) {
@@ -375,7 +373,7 @@ class Intune {
     encryptionBody: object,
     fileInfoBody: any,
     file: any
-  ): Promise<string> {
+  ): Promise<object> {
     try {
       const appCreationRes: any = await this.createApp(appCreationBody)
 
@@ -391,7 +389,6 @@ class Intune {
       )
 
       const fileId = fileUploadRes.id
-      console.log(chalk.bold.hex('#71c6e5')('Waiting for Storage URI'))
       const azureStorageUri = await this.getAzureStorageUri(
         appId,
         contentVersionId,
@@ -399,11 +396,7 @@ class Intune {
       )
       const fileSize = fileInfoBody.size
 
-      await this.uploadToAzureBlob(
-        azureStorageUri,
-        file,
-        fileSize
-      )
+      await this.uploadToAzureBlob(azureStorageUri, file, fileSize)
 
       await this.commitFileUpload(
         appId,
@@ -411,18 +404,11 @@ class Intune {
         fileId,
         encryptionBody
       )
-      console.log(
-        chalk.bold.hex('#71c6e5')('Waiting for Successful File Upload Status')
-      )
 
-      await this.getFileUploadStatus(
-        appId,
-        contentVersionId,
-        fileId
-      )
+      await this.getFileUploadStatus(appId, contentVersionId, fileId)
 
       await this.commitApp(appId, contentVersionId)
-      return chalk.bold.hex('#008000')('App Creation Successful')
+      return appCreationRes
     } catch (err) {
       throw err
     }
@@ -445,7 +431,6 @@ class Intune {
       )
 
       const fileId = fileUploadRes.id
-      console.log(chalk.bold.hex('#71c6e5')('Waiting for Storage URI'))
       const azureStorageUri = await this.getAzureStorageUri(
         appId,
         contentVersionId,
@@ -461,9 +446,6 @@ class Intune {
         fileId,
         encryptionBody
       )
-      console.log(
-        chalk.bold.hex('#71c6e5')('Waiting for Successful File Upload Status')
-      )
 
       await this.getFileUploadStatus(appId, contentVersionId, fileId)
       return `${appId} Updated`
@@ -472,46 +454,77 @@ class Intune {
     }
   }
 
-  private async _authenticate (): Promise<string> {
-    const res = await got(
-      `https://login.microsoftonline.com/${this.config.tenantId}/oauth2/v2.0/token`,
-      {
-        method: 'post',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        body: qs.stringify({
-          grant_type: 'client_credentials',
-          scope: 'https://graph.microsoft.com/.default',
-          client_id: this.config.clientId,
-          client_secret: this.config.clientSecret
-        })
-      }
-    )
-    const body: IOAuthResponse = JSON.parse(res.body)
-    this.accessToken = body.access_token
-    return body.access_token
+  isClientAuth = (e: ClientAuth | BearerAuth): e is ClientAuth => {
+    return (e as ClientAuth).clientId !== undefined
+  }
+
+  isBearerAuth = (e: ClientAuth | BearerAuth): e is BearerAuth => {
+    return (e as BearerAuth).bearerToken !== undefined
+  }
+
+  private async _authenticate (): Promise<string | undefined> {
+    if (this.isClientAuth(this.config.authentication)) {
+      const res = await got(
+        `https://login.microsoftonline.com/${this.config.tenantId}/oauth2/v2.0/token`,
+        {
+          method: 'post',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          body: qs.stringify({
+            grant_type: 'client_credentials',
+            scope: 'https://graph.microsoft.com/.default',
+            client_id: this.config.authentication.clientId,
+            client_secret: this.config.authentication.clientSecret
+          })
+        }
+      )
+      const body: IOAuthResponse = JSON.parse(res.body)
+      this.accessToken = body.access_token
+      return body.access_token
+    }
   }
 
   private async _IntuneRequest (url: string, options: any): Promise<any> {
-    try {
-      if (!this.accessToken) {
-        const token = await this._authenticate()
-        options.headers.Authorization = `Bearer ${token}`
-      } else {
-        options.headers.Authorization = `Bearer ${this.accessToken}`
-      }
-      const res = await got(url, options)
-
-      return res
-    } catch (err) {
-      if (err.statusCode === 401) {
-        const token = await this._authenticate()
-        options.headers.Authorization = `Bearer ${token}`
+    if (this.isClientAuth(this.config.authentication)) {
+      try {
+        if (this.accessToken === '') {
+          const token = await this._authenticate()
+          if (typeof token === 'string') {
+            options.headers.Authorization = `Bearer ${token}`
+          }
+        } else {
+          options.headers.Authorization = `Bearer ${this.accessToken}`
+        }
         const res = await got(url, options)
         return res
+      } catch (err) {
+        if (err.statusCode === 401) {
+          const token = await this._authenticate()
+          if (typeof token === 'string') {
+            options.headers.Authorization = `Bearer ${token}`
+          }
+          const res = await got(url, options)
+          return res
+        }
+        throw err
       }
-      throw err
+    } else if (this.isBearerAuth(this.config.authentication)) {
+      try {
+        if (this.accessToken === '') {
+          this.accessToken = this.config.authentication.bearerToken
+          options.headers.Authorization = `Bearer ${this.accessToken}`
+        }
+        const res = await got(url, options)
+        return res
+      } catch (err) {
+        if (err.statusCode === 401) {
+          options.headers.Authorization = `Bearer ${this.config.authentication.bearerToken}`
+          const res = await got(url, options)
+          return res
+        }
+        throw (err)
+      }
     }
   }
 }
