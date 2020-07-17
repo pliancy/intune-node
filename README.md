@@ -62,7 +62,7 @@ await intune.getAzureAdDevices()
 ### Get all Device Configurations
 
 ```javascript
-await getDeviceConfigurations()
+await intune.getDeviceConfigurations()
 ```
 
 ### Create Device Configuration
