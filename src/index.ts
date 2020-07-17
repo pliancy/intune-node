@@ -115,6 +115,51 @@ class Intune {
     }
   }
 
+  async getAppDependencies (appId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/relationships`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createAppDependency (appId: string, dependencyAppId: string, autoInstall: boolean): Promise<any> {
+    try {
+      let dependencyType = 'autoInstall'
+      if (!autoInstall) {
+        dependencyType = 'detect'
+      }
+      await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/updateRelationships`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: JSON.stringify(
+            {
+              relationships: [
+                {
+                  '@odata.type': '#microsoft.graph.mobileAppDependency',
+                  targetId: dependencyAppId,
+                  dependencyType: dependencyType
+                }
+              ]
+            })
+        }
+      )
+      return
+    } catch (err) {
+      throw err
+    }
+  }
+
   async createDeviceConfiguration (postBody: object): Promise<object> {
     try {
       const res = await this._IntuneRequest(
