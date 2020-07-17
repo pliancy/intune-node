@@ -131,30 +131,17 @@ class Intune {
     }
   }
 
-  async createAppDependency (appId: string, dependencyAppId: string, autoInstall: boolean): Promise<any> {
+  async setAppDependencies (appId: string, postBody: object): Promise<object> {
     try {
-      let dependencyType = 'autoInstall'
-      if (!autoInstall) {
-        dependencyType = 'detect'
-      }
-      await this._IntuneRequest(
+      const res = await this._IntuneRequest(
         `${this.domain}/deviceAppManagement/mobileApps/${appId}/updateRelationships`,
         {
           method: 'POST',
           headers: this.reqHeaders,
-          body: JSON.stringify(
-            {
-              relationships: [
-                {
-                  '@odata.type': '#microsoft.graph.mobileAppDependency',
-                  targetId: dependencyAppId,
-                  dependencyType: dependencyType
-                }
-              ]
-            })
+          body: JSON.stringify(postBody)
         }
       )
-      return
+      return { statusCode: res.statusCode }
     } catch (err) {
       throw err
     }
