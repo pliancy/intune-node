@@ -19,6 +19,6 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "lib"
+    "src/**/*.test.ts"
   ]
 }
