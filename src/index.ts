@@ -85,14 +85,80 @@ class Intune {
     }
   }
 
+  async rebootDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}/rebootNow`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async shutDownDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}/shutDown`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}`,
+        {
+          method: 'Get',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async updateDevice (deviceId: string, patchBody: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}`,
+        {
+          method: 'PATCH',
+          headers: this.reqHeaders,
+          body: JSON.stringify(patchBody)
+        }
+      )
+
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
   async wipeDevice (deviceId: string, keepEnrollmentData: boolean, keepUserData: boolean, useProtectedWipe: boolean, macOsUnlockCode?: string): Promise<object> {
     try {
-      const postbody = {
+      const postbody: any = {
         keepEnrollmentData: keepEnrollmentData,
         keepUserData: keepUserData,
-        macOsUnlockCode: macOsUnlockCode ?? null,
         useProtectedWipe: useProtectedWipe
+      }
 
+      if (macOsUnlockCode !== undefined) {
+        postbody.macOsUnlockCode = macOsUnlockCode
       }
 
       const res = await this._IntuneRequest(
@@ -100,7 +166,7 @@ class Intune {
         {
           method: 'POST',
           headers: this.reqHeaders,
-          body: postbody
+          body: JSON.stringify(postbody)
         }
       )
       return { statusCode: res.statusCode }
@@ -165,6 +231,32 @@ class Intune {
   async getUser (userId: string): Promise<object[]> {
     try {
       const res = await this._IntuneRequest(`${this.domain}/users/${userId}`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getUserAppsIntentandState (userId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users/${userId}/mobileAppIntentAndStates`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getUserAppIntentandState (userId: string, appIntentAndStateId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users/${userId}/mobileAppIntentAndStates/${appIntentAndStateId}`, {
         method: 'GET',
         headers: this.reqHeaders
       })
@@ -643,13 +735,15 @@ class Intune {
     azureStorageUri: string,
     file: any,
     fileSize: number,
-    statusCallback?: any
+    statusCallback?: any,
+    customBufferSize?: number
   ): Promise<Object> {
-    // Parse azureStorageUri
-    let bufferSize: number = 4 * 1024 * 1024 * 16
-    if (fileSize < 4000) {
+    let bufferSize: number = customBufferSize ?? 4 * 1024 * 1024
+    console.log(bufferSize)
+    if (fileSize < 4000 && typeof customBufferSize === 'undefined') {
       bufferSize = 1 * 1024
     }
+
     // Parse Storage URI
     const parseURL = new URL(azureStorageUri)
     const azureStorageUriArray = azureStorageUri.split('/')
