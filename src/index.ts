@@ -70,6 +70,45 @@ class Intune {
     }
   }
 
+  async syncDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}/syncDevice`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async wipeDevice (deviceId: string, keepEnrollmentData: boolean, keepUserData: boolean, useProtectedWipe: boolean, macOsUnlockCode?: string): Promise<object> {
+    try {
+      const postbody = {
+        keepEnrollmentData: keepEnrollmentData,
+        keepUserData: keepUserData,
+        macOsUnlockCode: macOsUnlockCode ?? null,
+        useProtectedWipe: useProtectedWipe
+
+      }
+
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}/wipe`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: postbody
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
   async getAzureAdDevices (): Promise<object[]> {
     try {
       const res = await this._IntuneRequest(`${this.domain}/devices?$top=999`, {
@@ -78,6 +117,203 @@ class Intune {
       })
       const resbody = JSON.parse(res.body)
       return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createUser (postBody: object): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users`, {
+        method: 'POST',
+        headers: this.reqHeaders,
+        body: JSON.stringify(postBody)
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async updateUser (userID: string, postBody: object): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users/${userID}`, {
+        method: 'PATCH',
+        headers: this.reqHeaders,
+        body: JSON.stringify(postBody)
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getUsers (): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users?$top=999`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getUser (userId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users/${userId}`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteUser (userId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/users/${userId}`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getGroups (): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups?$top=999`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getGroup (groupId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getGroupMembers (groupId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/members?$top=999`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getGroupOwners (groupId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/owners?$top=999`, {
+        method: 'GET',
+        headers: this.reqHeaders
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async addGroupMember (groupId: string, memberId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/members/$ref`, {
+        method: 'POST',
+        headers: this.reqHeaders,
+        body: JSON.stringify({
+          '@odata.id': `https://graph.microsoft.com/v1.0/users/${memberId}`
+        })
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async addGroupOwner (groupId: string, memberId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/owners/$ref`, {
+        method: 'POST',
+        headers: this.reqHeaders,
+        body: JSON.stringify({
+          '@odata.id': `https://graph.microsoft.com/v1.0/users/${memberId}`
+        })
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async removeGroupMember (groupId: string, userId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/members/${userId}/$ref`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async removeGroupOwner (groupId: string, userId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}/owners/${userId}/$ref`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createGroup (postBody: object): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups`, {
+        method: 'POST',
+        headers: this.reqHeaders,
+        body: JSON.stringify(postBody)
+      })
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteGroup (groupId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/groups/${groupId}`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
     } catch (err) {
       throw err
     }
@@ -94,6 +330,22 @@ class Intune {
       )
       const resbody = JSON.parse(res.body)
       return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getApp (appId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
     } catch (err) {
       throw err
     }
@@ -118,7 +370,7 @@ class Intune {
   async getAppDependencies (appId: string): Promise<object[]> {
     try {
       const res = await this._IntuneRequest(
-        `${this.domain}/deviceAppManagement/mobileApps/${appId}/relationships`,
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/relationships?$top=999`,
         {
           method: 'GET',
           headers: this.reqHeaders
@@ -139,6 +391,87 @@ class Intune {
           method: 'POST',
           headers: this.reqHeaders,
           body: JSON.stringify(postBody)
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getAppAssignments (appId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/assignments?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getAppAssignment (appId: string, mobileAppAssignmentId: string): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/assignments/${mobileAppAssignmentId}`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createAppAssignment (appId: string, postBody: object): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/assignments/`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async updateAppAssignment (appId: string, mobileAppAssignmentId: string, postBody: object): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/assignments/${mobileAppAssignmentId}`,
+        {
+          method: 'PATCH',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteAppAssignment (appId: string, mobileAppAssignmentId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}/assignments/${mobileAppAssignmentId}`,
+        {
+          method: 'DELETE',
+          headers: this.reqHeaders
         }
       )
       return { statusCode: res.statusCode }
@@ -176,6 +509,22 @@ class Intune {
       )
 
       return JSON.parse(res.body)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteApp (appId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceAppManagement/mobileApps/${appId}`,
+        {
+          method: 'DELETE',
+          headers: this.reqHeaders
+        }
+      )
+
+      return { statusCode: res.statusCode }
     } catch (err) {
       throw err
     }
@@ -297,10 +646,9 @@ class Intune {
     statusCallback?: any
   ): Promise<Object> {
     // Parse azureStorageUri
-    let bufferSize: number = 1 * 1024
+    let bufferSize: number = 4 * 1024 * 1024 * 16
     if (fileSize < 4000) {
-      const buffer: number = 1 * 1024
-      bufferSize = buffer
+      bufferSize = 1 * 1024
     }
     // Parse Storage URI
     const parseURL = new URL(azureStorageUri)
@@ -318,7 +666,7 @@ class Intune {
     const uploadBlobResponse = await blockBlobClient.uploadStream(
       file,
       bufferSize,
-      20,
+      5,
       {
         onProgress: (ev: any) =>
           statusCallback(fileSize, ev.loadedBytes) ?? null
