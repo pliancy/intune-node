@@ -54,6 +54,25 @@ class Intune {
 
   /* eslint-disable no-useless-catch */
 
+  async customApiCall (method: string, endpoint: string, body?: object): Promise<object[]> {
+    try {
+      const req: any = {
+        method: method,
+        headers: this.reqHeaders
+      }
+
+      if (typeof body !== 'undefined') {
+        req.body = body
+      }
+
+      const res = await this._IntuneRequest(`${this.domain}/${endpoint}`, req)
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
   async getIntuneDevices (): Promise<object[]> {
     try {
       const res = await this._IntuneRequest(
@@ -739,7 +758,6 @@ class Intune {
     customBufferSize?: number
   ): Promise<Object> {
     let bufferSize: number = customBufferSize ?? 4 * 1024 * 1024
-    console.log(bufferSize)
     if (fileSize < 4000 && typeof customBufferSize === 'undefined') {
       bufferSize = 1 * 1024
     }
