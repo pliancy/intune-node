@@ -54,7 +54,7 @@ class Intune {
 
   /* eslint-disable no-useless-catch */
 
-  async customRequest (method: string, endpoint: string, body?: object): Promise<object[]> {
+  async request (method: string, endpoint: string, body?: object): Promise<object[]> {
     try {
       const req: any = {
         method: method,
