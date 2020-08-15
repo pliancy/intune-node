@@ -1,24 +1,15 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es2019",
     "module": "commonjs",
-    "lib": [
-      "es2015",
-      "es2016",
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2015", "es2016", "es2017", "dom"],
     "strict": true,
     "declaration": true,
     "esModuleInterop": true,
     "outDir": "lib",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "pretty": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.test.ts"
-  ]
+  "include": ["src/**/*"]
 }

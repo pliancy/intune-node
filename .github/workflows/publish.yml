@@ -1,0 +1,31 @@
+
+name: Publish-On-Tag
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js v13.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 13.x
+
+    - name: npm install and test
+      run: |
+        npm ci
+        npm test
+      env:
+        CI: true
+
+    - name: npm publish
+      run: |
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        npm publish
