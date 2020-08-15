@@ -47,6 +47,12 @@ Bearer Token Auth:
 
 ## Example Usage
 
+### Custom Request
+
+```javascript
+await intune.customRequest('Get', 'users')
+```
+
 ### Get all Intune Devices
 
 ```javascript

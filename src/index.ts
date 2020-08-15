@@ -54,7 +54,7 @@ class Intune {
 
   /* eslint-disable no-useless-catch */
 
-  async customApiCall (method: string, endpoint: string, body?: object): Promise<object[]> {
+  async customRequest (method: string, endpoint: string, body?: object): Promise<object[]> {
     try {
       const req: any = {
         method: method,
