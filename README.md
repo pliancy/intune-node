@@ -50,7 +50,7 @@ Bearer Token Auth:
 ### Custom Request
 
 ```javascript
-await intune.customRequest('Get', 'users')
+await intune.request('Get', 'users/user@user.com')
 ```
 
 ### Get all Intune Devices
