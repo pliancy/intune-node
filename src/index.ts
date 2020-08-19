@@ -104,6 +104,24 @@ class Intune {
     }
   }
 
+  async setDeviceName (deviceId: string, newDeviceName: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/managedDevices/${deviceId}/setDeviceName`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: JSON.stringify({
+            deviceName: newDeviceName
+          })
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
   async rebootDevice (deviceId: string): Promise<object> {
     try {
       const res = await this._IntuneRequest(
