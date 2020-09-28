@@ -89,6 +89,22 @@ class Intune {
     }
   }
 
+  async getAutopilotDevices (): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/windowsAutopilotDeviceIdentities?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
   async syncDevice (deviceId: string): Promise<object> {
     try {
       const res = await this._IntuneRequest(
@@ -96,6 +112,36 @@ class Intune {
         {
           method: 'POST',
           headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async autopilotUpload (serialNumber?: string, groupTag?: string, productKey?: string, hardwareIdentifier?: string, assignedUser?: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/importedWindowsAutopilotDeviceIdentities`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: {
+            '@odata.type': '#microsoft.graph.importedWindowsAutopilotDeviceIdentity',
+            orderIdentifier: groupTag ?? null,
+            serialNumber: serialNumber ?? null,
+            productKey: productKey ?? null,
+            hardwareIdentifier: hardwareIdentifier ?? null,
+            assignedUserPrincipalName: assignedUser ?? null,
+            state: {
+              '@odata.type': 'microsoft.graph.importedWindowsAutopilotDeviceIdentityState',
+              deviceImportStatus: 'pending',
+              deviceRegistrationId: '',
+              deviceErrorCode: 0,
+              deviceErrorName: ''
+            }
+          }
         }
       )
       return { statusCode: res.statusCode }
@@ -307,6 +353,18 @@ class Intune {
   async deleteUser (userId: string): Promise<object> {
     try {
       const res = await this._IntuneRequest(`${this.domain}/users/${userId}`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/deviceManagement/managedDevices/${deviceId}`, {
         method: 'DELETE',
         headers: this.reqHeaders
       })
