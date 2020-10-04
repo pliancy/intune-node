@@ -45,6 +45,14 @@ interface IntuneScript {
   runAs32Bit: boolean
 }
 
+interface AutoPilotUpload {
+  serialNumber?: string
+  groupTag?: string
+  productKey?: string
+  hardwareIdentifier?: string
+  assignedUser?: string
+}
+
 class Intune {
   config: IntuneConfig
   domain: string
@@ -130,24 +138,27 @@ class Intune {
     }
   }
 
-  async autopilotUpload (serialNumber?: string, groupTag?: string, productKey?: string, hardwareIdentifier?: string, assignedUser?: string): Promise<object> {
+  async autopilotUpload ({ serialNumber, groupTag, productKey, hardwareIdentifier, assignedUser }: AutoPilotUpload): Promise<object> {
     try {
+      const postBody = {
+        '@odata.type': '#microsoft.graph.importedWindowsAutopilotDeviceIdentity',
+        orderIdentifier: groupTag ?? null,
+        serialNumber: serialNumber ?? null,
+        productKey: productKey ?? null,
+        hardwareIdentifier: hardwareIdentifier ?? null,
+        assignedUserPrincipalName: assignedUser ?? null
+      }
+      console.log(postBody)
       const res = await this._IntuneRequest(
         `${this.domain}/deviceManagement/importedWindowsAutopilotDeviceIdentities`,
         {
           method: 'POST',
           headers: this.reqHeaders,
-          body: {
-            '@odata.type': '#microsoft.graph.importedWindowsAutopilotDeviceIdentity',
-            orderIdentifier: groupTag ?? null,
-            serialNumber: serialNumber ?? null,
-            productKey: productKey ?? null,
-            hardwareIdentifier: hardwareIdentifier ?? null,
-            assignedUserPrincipalName: assignedUser ?? null
-          }
+          body: JSON.stringify(postBody)
         }
       )
-      return { statusCode: res.statusCode }
+      const resbody = JSON.parse(res.body)
+      return resbody
     } catch (err) {
       throw err
     }
