@@ -35,6 +35,24 @@ interface IOAuthResponse {
   access_token: string
 }
 
+interface IntuneScript {
+  displayName: string
+  description: string
+  scriptContent: string
+  runAsAccount: 'system' | 'user'
+  enforceSignatureCheck: boolean
+  fileName: string
+  runAs32Bit: boolean
+}
+
+interface AutoPilotUpload {
+  serialNumber?: string
+  groupTag?: string
+  productKey?: string
+  hardwareIdentifier?: string
+  assignedUser?: string
+}
+
 class Intune {
   config: IntuneConfig
   domain: string
@@ -89,6 +107,22 @@ class Intune {
     }
   }
 
+  async getAutopilotDevices (): Promise<object[]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/windowsAutopilotDeviceIdentities?$top=999`,
+        {
+          method: 'GET',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
   async syncDevice (deviceId: string): Promise<object> {
     try {
       const res = await this._IntuneRequest(
@@ -99,6 +133,32 @@ class Intune {
         }
       )
       return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async autopilotUpload ({ serialNumber, groupTag, productKey, hardwareIdentifier, assignedUser }: AutoPilotUpload): Promise<object> {
+    try {
+      const postBody = {
+        '@odata.type': '#microsoft.graph.importedWindowsAutopilotDeviceIdentity',
+        orderIdentifier: groupTag ?? null,
+        serialNumber: serialNumber ?? null,
+        productKey: productKey ?? null,
+        hardwareIdentifier: hardwareIdentifier ?? null,
+        assignedUserPrincipalName: assignedUser ?? null
+      }
+      console.log(postBody)
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/importedWindowsAutopilotDeviceIdentities`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
     } catch (err) {
       throw err
     }
@@ -144,6 +204,136 @@ class Intune {
         {
           method: 'POST',
           headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getScripts (): Promise<[object]> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts`,
+        {
+          method: 'Get',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody.value
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getScript (scriptId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts/${scriptId}`,
+        {
+          method: 'Get',
+          headers: this.reqHeaders
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createScript ({ displayName, description, scriptContent, fileName, runAsAccount, runAs32Bit = false, enforceSignatureCheck = false }: IntuneScript): Promise<object> {
+    try {
+      const postBody = {
+        '@odata.type': '#microsoft.graph.deviceManagementScript',
+        displayName: displayName,
+        description: description,
+        scriptContent: scriptContent,
+        runAsAccount: runAsAccount,
+        enforceSignatureCheck: enforceSignatureCheck,
+        fileName: fileName,
+        runAs32Bit: runAs32Bit
+      }
+
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts`,
+        {
+          method: 'Post',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async updateScript (scriptId: string, { displayName, description, scriptContent, fileName, runAsAccount, runAs32Bit = false, enforceSignatureCheck = false }: IntuneScript): Promise<object> {
+    try {
+      const postBody = {
+        '@odata.type': '#microsoft.graph.deviceManagementScript',
+        displayName: displayName,
+        description: description,
+        scriptContent: scriptContent,
+        runAsAccount: runAsAccount,
+        enforceSignatureCheck: enforceSignatureCheck,
+        fileName: fileName,
+        runAs32Bit: runAs32Bit
+      }
+
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts${scriptId}`,
+        {
+          method: 'Patch',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
+        }
+      )
+      const resbody = JSON.parse(res.body)
+      return resbody
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteScript (scriptId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts/${scriptId}`,
+        {
+          method: 'Delete',
+          headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async createScriptAssignment (scriptId: string, groupIds: string[]): Promise<object> {
+    try {
+      const groupAssignments = groupIds.map((e: string) => {
+        return {
+          '@odata.type': '#microsoft.graph.deviceManagementScriptGroupAssignment',
+          targetGroupId: e
+        }
+      })
+
+      const postBody = {
+        deviceManagementScriptGroupAssignments: groupAssignments
+      }
+
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/deviceManagementScripts/${scriptId}/assign`,
+        {
+          method: 'Post',
+          headers: this.reqHeaders,
+          body: JSON.stringify(postBody)
         }
       )
       return { statusCode: res.statusCode }
@@ -307,6 +497,18 @@ class Intune {
   async deleteUser (userId: string): Promise<object> {
     try {
       const res = await this._IntuneRequest(`${this.domain}/users/${userId}`, {
+        method: 'DELETE',
+        headers: this.reqHeaders
+      })
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async deleteDevice (deviceId: string): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(`${this.domain}/deviceManagement/managedDevices/${deviceId}`, {
         method: 'DELETE',
         headers: this.reqHeaders
       })
