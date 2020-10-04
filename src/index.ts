@@ -994,16 +994,24 @@ class Intune {
     const blobServiceClient = new BlobServiceClient(sasUrl, pipeline)
     const containerClient = blobServiceClient.getContainerClient(blobContainer)
     const blockBlobClient = containerClient.getBlockBlobClient(blobName)
-
-    const uploadBlobResponse = await blockBlobClient.uploadStream(
-      file,
-      bufferSize,
-      5,
-      {
-        onProgress: (ev: any) =>
-          statusCallback(fileSize, ev.loadedBytes) ?? null
-      }
-    )
+    let uploadBlobResponse: object = {}
+    if (typeof statusCallback !== 'undefined') {
+      uploadBlobResponse = await blockBlobClient.uploadStream(
+        file,
+        bufferSize,
+        5,
+        {
+          onProgress: (ev: any) =>
+            statusCallback(fileSize, ev.loadedBytes)
+        }
+      )
+    } else {
+      uploadBlobResponse = await blockBlobClient.uploadStream(
+        file,
+        bufferSize,
+        5
+      )
+    }
     return uploadBlobResponse
   }
 
