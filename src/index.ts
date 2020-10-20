@@ -138,6 +138,21 @@ class Intune {
     }
   }
 
+  async autoPilotSync (): Promise<object> {
+    try {
+      const res = await this._IntuneRequest(
+        `${this.domain}/deviceManagement/windowsAutopilotSettings/sync`,
+        {
+          method: 'POST',
+          headers: this.reqHeaders
+        }
+      )
+      return { statusCode: res.statusCode }
+    } catch (err) {
+      throw err
+    }
+  }
+
   async autopilotUpload ({ serialNumber, groupTag, productKey, hardwareIdentifier, assignedUser }: AutoPilotUpload): Promise<object> {
     try {
       const postBody = {
