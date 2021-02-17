@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    open-pull-requests-limit: 5
+    rebase-strategy: auto
+    reviewers:
+      - pliancy/dependency-reviewers
+    schedule:
+      interval: daily
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    open-pull-requests-limit: 5
+    rebase-strategy: auto
+    reviewers:
+      - pliancy/dependency-reviewers
+    schedule:
+      interval: weekly
