@@ -14,9 +14,6 @@ import { IntuneConfig, ClientAuth, BearerAuth, IOAuthResponse, IntuneScript, Aut
  * @interface IntuneConfig
  */
 
-
-
-
 class Intune {
   config: IntuneConfig
   domain: string
