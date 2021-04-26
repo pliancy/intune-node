@@ -5,6 +5,7 @@ import {
   AnonymousCredential,
   newPipeline
 } from '@azure/storage-blob'
+import { IntuneConfig, ClientAuth, BearerAuth, IOAuthResponse, IntuneScript, AutoPilotUpload, IntuneDeviceResponse, AzureDeviceResponse } from './types'
 
 /**
  * The Config for the Intune class
@@ -12,46 +13,6 @@ import {
  * @export
  * @interface IntuneConfig
  */
-interface IntuneConfig {
-  tenantId: string
-  authentication: ClientAuth | BearerAuth
-}
-
-interface ClientAuth {
-  clientId: string
-  clientSecret: string
-}
-
-interface BearerAuth {
-  bearerToken: string
-}
-interface IOAuthResponse {
-  token_type: string
-  expires_in: string
-  ext_expires_in: string
-  expires_on: string
-  not_before: string
-  resource: string
-  access_token: string
-}
-
-interface IntuneScript {
-  displayName: string
-  description: string
-  scriptContent: string
-  runAsAccount: 'system' | 'user'
-  enforceSignatureCheck: boolean
-  fileName: string
-  runAs32Bit: boolean
-}
-
-interface AutoPilotUpload {
-  serialNumber?: string
-  groupTag?: string
-  productKey?: string
-  hardwareIdentifier?: string
-  assignedUser?: string
-}
 
 class Intune {
   config: IntuneConfig
@@ -91,7 +52,7 @@ class Intune {
     }
   }
 
-  async getIntuneDevices (): Promise<object[]> {
+  async getIntuneDevices (): Promise<IntuneDeviceResponse[]> {
     try {
       const res = await this._IntuneRequest(
         `${this.domain}/deviceManagement/managedDevices?$top=999`,
@@ -417,7 +378,7 @@ class Intune {
     }
   }
 
-  async getAzureAdDevices (): Promise<object[]> {
+  async getAzureAdDevices (): Promise<AzureDeviceResponse[]> {
     try {
       const res = await this._IntuneRequest(`${this.domain}/devices?$top=999`, {
         method: 'GET',
