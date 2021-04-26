@@ -5,7 +5,7 @@ import {
   AnonymousCredential,
   newPipeline
 } from '@azure/storage-blob'
-import { IntuneConfig, ClientAuth, BearerAuth, IOAuthResponse, IntuneScript, AutoPilotUpload, IntuneDeviceResponse, AzureDeviceResponse} from './types'
+import { IntuneConfig, ClientAuth, BearerAuth, IOAuthResponse, IntuneScript, AutoPilotUpload, IntuneDeviceResponse, AzureDeviceResponse } from './types'
 
 /**
  * The Config for the Intune class
