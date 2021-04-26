@@ -100,7 +100,7 @@ export interface IntuneDeviceResponse {
   managementCertificateExpirationDate: string
   iccid?: unknown
   udid?: unknown
-  roleScopeTagIds: Array<unknown>
+  roleScopeTagIds: unknown[]
   windowsActiveMalwareCount: number
   windowsRemediatedMalwareCount: number
   notes?: unknown
@@ -115,38 +115,38 @@ export interface IntuneDeviceResponse {
   skuNumber: number
   managementFeatures: string
   hardwareInformation: {
-      serialNumber: string
-      totalStorageSpace: number
-      freeStorageSpace: number
-      imei: string
-      meid?: unknown
-      manufacturer?: unknown
-      model?: unknown
-      phoneNumber?: unknown
-      subscriberCarrier?: unknown
-      cellularTechnology?: unknown
-      wifiMac?: unknown
-      operatingSystemLanguage?: unknown
-      isSupervised: boolean
-      isEncrypted: boolean
-      batterySerialNumber?: unknown
-      batteryHealthPercentage: number
-      batteryChargeCycles: number
-      isSharedDevice: boolean
-      tpmSpecificationVersion?: unknown
-      operatingSystemEdition?: unknown
-      deviceFullQualifiedDomainName?: unknown
-      deviceGuardVirtualizationBasedSecurityHardwareRequirementState: string
-      deviceGuardVirtualizationBasedSecurityState: string
-      deviceGuardLocalSystemAuthorityCredentialGuardState: string
-      osBuildNumber?: unknown
-      operatingSystemProductType: number
-      ipAddressV4?: unknown
-      subnetAddress?: unknown
-      sharedDeviceCachedUsers: []
+    serialNumber: string
+    totalStorageSpace: number
+    freeStorageSpace: number
+    imei: string
+    meid?: unknown
+    manufacturer?: unknown
+    model?: unknown
+    phoneNumber?: unknown
+    subscriberCarrier?: unknown
+    cellularTechnology?: unknown
+    wifiMac?: unknown
+    operatingSystemLanguage?: unknown
+    isSupervised: boolean
+    isEncrypted: boolean
+    batterySerialNumber?: unknown
+    batteryHealthPercentage: number
+    batteryChargeCycles: number
+    isSharedDevice: boolean
+    tpmSpecificationVersion?: unknown
+    operatingSystemEdition?: unknown
+    deviceFullQualifiedDomainName?: unknown
+    deviceGuardVirtualizationBasedSecurityHardwareRequirementState: string
+    deviceGuardVirtualizationBasedSecurityState: string
+    deviceGuardLocalSystemAuthorityCredentialGuardState: string
+    osBuildNumber?: unknown
+    operatingSystemProductType: number
+    ipAddressV4?: unknown
+    subnetAddress?: unknown
+    sharedDeviceCachedUsers: []
   }
-  deviceActionResults: Array<unknown>
-  usersLoggedOn: Array<unknown>
+  deviceActionResults: unknown[]
+  usersLoggedOn: unknown[]
   trustType?: string
 }
 
@@ -188,20 +188,20 @@ export interface AzureDeviceResponse {
   trustType: string
   alternativeSecurityIds: string[]
   extensionAttributes: {
-      extensionAttribute1?: string
-      extensionAttribute2?: string
-      extensionAttribute3?: string
-      extensionAttribute4?: string
-      extensionAttribute5?: string
-      extensionAttribute6?: string
-      extensionAttribute7?: string
-      extensionAttribute8?: string
-      extensionAttribute9?: string
-      extensionAttribute10?: string
-      extensionAttribute11?: string
-      extensionAttribute12?: string
-      extensionAttribute13?: string
-      extensionAttribute14?: string
-      extensionAttribute15?: string
+    extensionAttribute1?: string
+    extensionAttribute2?: string
+    extensionAttribute3?: string
+    extensionAttribute4?: string
+    extensionAttribute5?: string
+    extensionAttribute6?: string
+    extensionAttribute7?: string
+    extensionAttribute8?: string
+    extensionAttribute9?: string
+    extensionAttribute10?: string
+    extensionAttribute11?: string
+    extensionAttribute12?: string
+    extensionAttribute13?: string
+    extensionAttribute14?: string
+    extensionAttribute15?: string
   }
 }
