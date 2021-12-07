@@ -5,13 +5,16 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "lint": "eslint -f pretty src/",
-    "test": "npm run lint && jest",
-    "docs": "rimraf ./docs && typedoc src/ --out docs --mode modules --module commonjs --target es6 --excludePrivate && touch ./docs/.nojekyll && gh-pages -d docs -t",
-    "build": "npm run clean && npm run test && tsc",
-    "prepare": "npm run build",
-    "precommit": "lint-staged"
+    "build": "run-s -l clean test tsc copy",
+    "build:check": "tsc --noEmit",
+    "clean": "rimraf coverage dist tmp",
+    "copy": "pinst --disable && cpy package.json dist && cpy README.md dist && pinst --enable",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "postinstall": "husky install",
+    "qa": "run-s -l lint test clean build:check",
+    "semantic-release": "semantic-release",
+    "test": "jest",
+    "tsc": "tsc -p tsconfig.build.json"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -28,30 +31,25 @@
   "license": "MIT",
   "dependencies": {
     "@azure/storage-blob": "^12.1.1",
-    "@types/qs": "^6.9.1",
+    "axios": "^0.24.0",
     "eslint": "^7.6.0",
     "got": "^11.0.2"
   },
   "devDependencies": {
-    "@types/got": "^9.6.10",
-    "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.4",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "eslint-config-standard-with-typescript": "^16.0.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "gh-pages": "^2.2.0",
-    "jest": "^25.5.2",
-    "lint-staged": "^10.2.0",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^25.4.0",
-    "typedoc": "^0.17.6",
-    "typescript": "^3.8.3",
-    "@types/eslint": "^7.2.0",
-    "eslint": "^7.6.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-formatter-pretty": "^4.0.0"
+    "@pliancy/eslint-config-ts": "0.0.5",
+    "@pliancy/semantic-release-config-npm": "^2.1.0",
+    "@types/jest": "27.0.1",
+    "commitizen": "4.2.4",
+    "cpy-cli": "3.1.1",
+    "husky": "7.0.2",
+    "jest": "27.1.0",
+    "npm-run-all": "^4.1.5",
+    "pinst": "2.1.6",
+    "rimraf": "3.0.2",
+    "semantic-release": "^17.4.7",
+    "ts-jest": "27.0.5",
+    "ts-node": "^9.1.1",
+    "typescript": "4.4.2",
+    "@types/qs": "^6.9.1"
   }
 }
