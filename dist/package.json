@@ -10,7 +10,7 @@
     "clean": "rimraf coverage dist tmp",
     "copy": "pinst --disable && cpy package.json dist && cpy README.md dist && pinst --enable",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "qa": "run-s -l lint test clean build:check",
     "semantic-release": "semantic-release",
     "test": "jest",

@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "@pliancy/semantic-release-config-npm"
+  ]
+}

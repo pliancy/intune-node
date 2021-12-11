@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$SKIP_COMMITIZEN" = "true" ]; then
+  exit 0
+else
+  exec </dev/tty && git cz --hook || true
+fi

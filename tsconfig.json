@@ -16,11 +16,7 @@
       "skipLibCheck": true,
       "outDir": "dist",
       "baseUrl": ".",
-      "paths": {
-        "@/*": [
-            "src/lib/*"
-        ]
-    }
+      
   },
   "include": ["src/**/*"]
 }
