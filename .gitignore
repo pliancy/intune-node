@@ -4,6 +4,7 @@ lib/
 _scratch/
 docs/
 .DS_Store
+dist/
 
 # Logs
 logs
@@ -78,3 +79,7 @@ typings/
 
 # Serverless directories
 .serverless
+
+
+
+
