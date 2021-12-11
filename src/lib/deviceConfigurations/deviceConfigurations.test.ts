@@ -14,7 +14,7 @@ describe('Device Configurations', () => {
         targetGroupId: '1',
     }
 
-    it('should get a device configurations', async () => {
+    it('should get a device configuration', async () => {
         const graphClient = mockClient() as never as Client
         deviceConfigurations = new DeviceConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(deviceConfiguration)
@@ -68,7 +68,9 @@ describe('Device Configurations', () => {
         const spy = jest.spyOn(graphClient, 'api')
         const result = await deviceConfigurations.createGroupAssignment('id', 'groupId')
         expect(result).toEqual(groupAssignment)
-        expect(spy).toHaveBeenCalledWith('/deviceManagement/deviceConfigurations/id/assignments')
+        expect(spy).toHaveBeenCalledWith(
+            '/deviceManagement/deviceConfigurations/id/groupAssignments',
+        )
     })
 
     it('should list group assignments', async () => {

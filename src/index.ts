@@ -5,4 +5,9 @@ export {
     ManagedDevice,
     WindowsAutopilotDeviceIdentity,
     FileEncryptionInfo,
+    MobileAppIntentAndState,
+    User,
+    GroupPolicyConfiguration,
+    GroupPolicyConfigurationAssignment,
+    GroupPolicyDefinitionValue,
 } from '@microsoft/microsoft-graph-types-beta'

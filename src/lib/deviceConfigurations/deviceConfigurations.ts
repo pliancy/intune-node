@@ -4,7 +4,7 @@ import { DeviceConfiguration } from '../types'
 export class DeviceConfigurations {
     constructor(private readonly graphClient: Client) {}
 
-    async list(): Promise<DeviceConfiguration[]> {
+    async list() {
         let res = await this.graphClient.api('/deviceManagement/deviceConfigurations').get()
         const deviceConfigurations: DeviceConfiguration[] = res.value
         while (res['@odata.nextLink']) {
@@ -48,7 +48,7 @@ export class DeviceConfigurations {
         groupId: string,
     ): Promise<DeviceConfigurationGroupAssignment> {
         return this.graphClient
-            .api(`/deviceManagement/deviceConfigurations/${id}/assignments`)
+            .api(`/deviceManagement/deviceConfigurations/${id}/groupAssignments`)
             .post({
                 '@odata.type': '#microsoft.graph.deviceConfigurationGroupAssignment',
                 targetGroupId: groupId,
