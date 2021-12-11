@@ -6,6 +6,9 @@ import { Devices } from './devices/devices'
 import { DeviceConfigurations } from './deviceConfigurations/deviceConfigurations'
 import { DeviceManagementScripts } from './deviceManagementScripts/deviceManagementScripts'
 import { MobileApps } from './mobileApps/mobileApps'
+import { Groups } from './groups/groups'
+import { Users } from './users/users'
+import { GroupPolicyConfigurations } from './groupPolicyConfigurations/groupPolicyConfigurations'
 require('isomorphic-fetch')
 
 export class Intune {
@@ -19,6 +22,12 @@ export class Intune {
 
     readonly mobileApps: MobileApps
 
+    readonly groups: Groups
+
+    readonly groupPolicyConfigurations: GroupPolicyConfigurations
+
+    readonly users: Users
+
     private constructor(readonly authProvider: TokenCredentialAuthenticationProvider) {
         this.graphclient = Client.initWithMiddleware({
             authProvider,
@@ -29,6 +38,9 @@ export class Intune {
         this.deviceConfigurations = new DeviceConfigurations(this.graphclient)
         this.deviceManagementScripts = new DeviceManagementScripts(this.graphclient)
         this.mobileApps = new MobileApps(this.graphclient)
+        this.groups = new Groups(this.graphclient)
+        this.groupPolicyConfigurations = new GroupPolicyConfigurations(this.graphclient)
+        this.users = new Users(this.graphclient)
     }
 
     static init(config: Config) {
