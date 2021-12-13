@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "es2019",
-    "module": "commonjs",
-    "lib": ["es2015", "es2016", "es2017", "dom"],
-    "strict": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "outDir": "lib",
-    "skipLibCheck": true,
-    "pretty": true
+      "lib": ["ES2020"],
+      "module": "commonjs",
+      "target": "ES2018",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowJs": true,
+      "checkJs": true,
+      "importHelpers": true,
+      "jsx": "react",
+      "strict": true,
+      "pretty": true,
+      "sourceMap": true,
+      "declaration": true,
+      "skipLibCheck": true,
+      "outDir": "dist",
+      "baseUrl": ".",
+      
   },
   "include": ["src/**/*"]
 }

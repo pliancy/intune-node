@@ -1,27 +1,30 @@
-# Microsoft Intune API Wrapper
+# Microsoft Intune SDK
 
-Typescript wrapper for Intune with Microsoft's Beta Graph API
+[Full Documentation](https://pliancy.github.io/intune-node/) 
 
 ## Getting Started
 
 You can install the package with the following command:
 
-```
+```javascript
 npm install microsoft-intune
+```
+
+```javascript
+yarn install microsoft-intune
 ```
 
 Import the package 
 
 ```javascript
-const Intune = require('microsoft-intune')
-
+import { Intune } from 'microsoft-intune'
 ```
 
-<hr>
-Client ID and Client Secret Auth:
+Initialize with Client ID and Client Secret Auth:
+
 
 ```javascript
-  const intune = new Intune({
+  const intune = Intune.init({
     authentication: {
       clientId: '',
       clientSecret: ''
@@ -32,62 +35,43 @@ Client ID and Client Secret Auth:
 
 
 
-Bearer Token Auth:
-
-```javascript
-  const intune = new Intune({
-    authentication: {
-      bearerToken: ''
-    },
-    tenantId: ''
-  })
-```
-
-
-
 ## Example Usage
-
-### Custom Request
-
-```javascript
-await intune.request('Get', 'users/user@user.com')
-```
 
 ### Get all Intune Devices
 
 ```javascript
-await intune.getIntuneDevices()
+await intune.devices.list()
 ```
 
 ### Get all AzureAd Devices
 
 ```javascript
-await intune.getAzureAdDevices()
+await intune.devices.listAzureAdDevices()
 ```
 
 ### Get all Device Configurations
 
 ```javascript
-await intune.getDeviceConfigurations()
+await intune.deviceConfigurations.list()
 ```
 
 ### Create Device Configuration
 
 ```javascript
-const postBody = {
+const deviceConfiguration = {
   "@odata.type": "#microsoft.graph.windows10GeneralConfiguration",
   "description": "Disables sleep when lid is closed",
   "displayName": "Power - Disable Sleep for Lid Close",
   "powerLidCloseActionPluggedIn": "noAction"
 }
 
-await intune.createDeviceConfiguration(postBody)
+await intune.deviceConfigurations.create(deviceConfiguration)
 ```
 
 ### Create Office Suite App
 
 ```javascript
-const postBody = { 
+const officeApp = { 
   "@odata.type": "#microsoft.graph.officeSuiteApp",
   "displayName": "Office 365",
   "description": "Office 365 for Windows 10",
@@ -131,15 +115,15 @@ const postBody = {
   }
 }
 
-await createApp(postBody)
+await intune.mobileApps.create(officeApp)
 ```
 
 ### Create and Upload Win32 App from Stream
 
-This function requires 3 json objects and the unencrypted .intunewin file . Some of the info for these objects is in the detection.xml, that's located in the extracted .intunewin file. You can also use each of the functions that this function calls individually to get more control on logging. 
+This function requires the mobileApp Info, fileEncryptionInfo, mobileAppContentFile,  and the unencrypted .intunewin file . Some info for these objects is found in the detection.xml that's located in the extracted .intunewin file.
 
 ```javascript
-const appcreationBody = {
+const mobileApp = {
   '@odata.type': '#microsoft.graph.win32LobApp',
   displayName: 'App',
   description: '',
@@ -203,8 +187,7 @@ const appcreationBody = {
   ]
 }
 
-const encryptionBody = {
-  fileEncryptionInfo: {
+const fileEncryptionInfo = {
     fileDigestAlgorithm: 'SHA256',
     encryptionKey: 'BKu4^YNmrrfG74yT3R&qAly',
     initializationVector: 'BKu4^YNmrrfG74yT3R&qAly',
@@ -213,9 +196,8 @@ const encryptionBody = {
     profileIdentifier: 'ProfileVersion1',
     macKey: 'BKu4^YNmrrfG74yT3R&qAly'
   }
-}
 
-const fileInfoBody = {
+const mobileAppContentFile = {
   '@odata.type': '#microsoft.graph.mobileAppContentFile',
   manifest: null,
   size: 3332,
@@ -224,5 +206,13 @@ const fileInfoBody = {
   isDependency: false
 }
 
-await createWin32app(appCreationBody, encryptionBody, fileInfoBody, unencryptedFile) 
+await intune.createWin32LobApp(mobileApp, fileEncryptionInfo, mobileAppContentFile, unencryptedFile) 
 ```
+
+### Custom Request
+
+```javascript
+await intune.customRequest.get('/endpoint')
+```
+
+### 
