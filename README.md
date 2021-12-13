@@ -11,7 +11,7 @@ npm install microsoft-intune
 ```
 
 ```javascript
-yarn install microsoft-intune
+yarn add microsoft-intune
 ```
 
 Import the package 
