@@ -2,8 +2,8 @@
   "name": "microsoft-intune",
   "version": "1.2.0",
   "description": "sdk for Microsoft Intune",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "run-s -l clean test tsc copy",
     "build:check": "tsc --noEmit",
