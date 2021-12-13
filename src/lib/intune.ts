@@ -28,7 +28,7 @@ export class Intune {
 
     readonly users: Users
 
-    private constructor(readonly authProvider: TokenCredentialAuthenticationProvider) {
+    private constructor(private readonly authProvider: TokenCredentialAuthenticationProvider) {
         this.graphclient = Client.initWithMiddleware({
             authProvider,
             defaultVersion: 'beta',

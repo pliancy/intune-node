@@ -63,7 +63,7 @@ export class DeviceConfigurations {
         while (res['@odata.nextLink']) {
             const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
             res = await this.graphClient.api(nextLink).get()
-            const nextGroupAssignments = res.value as DeviceConfigurationGroupAssignment[]
+            const nextGroupAssignments: DeviceConfigurationGroupAssignment[] = res.value
             groupAssignments.push(...nextGroupAssignments)
         }
         return groupAssignments

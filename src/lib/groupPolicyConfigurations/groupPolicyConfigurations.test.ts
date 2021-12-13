@@ -4,6 +4,7 @@ import { mockClient } from '../../test/mocks/@microsoft/microsoft-graph-client'
 import {
     GroupPolicyConfiguration,
     GroupPolicyConfigurationAssignment,
+    GroupPolicyDefinitionValue,
 } from '@microsoft/microsoft-graph-types-beta'
 
 describe('Device Configurations', () => {
@@ -11,7 +12,13 @@ describe('Device Configurations', () => {
     const groupPolicyConfiguration = {
         name: 'test',
         '@odata.type': '#microsoft.graph.groupPolicyConfiguration',
+        id: '1',
     } as GroupPolicyConfiguration
+
+    const definitionValue = {
+        name: 'test',
+        id: '1',
+    } as GroupPolicyDefinitionValue
 
     const groupAssignment = {
         '@odata.type': '#microsoft.graph.deviceManagementScriptGroupAssignment',
@@ -63,6 +70,15 @@ describe('Device Configurations', () => {
         jest.spyOn(graphClient.api(''), 'delete')
         const result = await groupPolicyConfigurations.delete('id')
         expect(result).toBeUndefined()
+    })
+
+    it('should get a group policy configuration and definition values', async () => {
+        const graphClient = mockClient() as never as Client
+        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
+        jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce(groupPolicyConfiguration)
+        jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({ value: [definitionValue] })
+        const result = await groupPolicyConfigurations.getWithDefinitionValues('1')
+        expect(result).toEqual({ ...groupPolicyConfiguration, definitionValues: [definitionValue] })
     })
 
     it('should create an assignment', async () => {

@@ -111,6 +111,37 @@ export class GroupPolicyConfigurations {
             .delete()
     }
 
+    async createWithDefinitionValues(
+        groupPolicyConfiguration: GroupPolicyConfiguration,
+        groupPolicyDefinitionValues: GroupPolicyDefinitionValue[],
+    ): Promise<GroupPolicyConfiguration> {
+        const groupPolicyConfigurationRes = await this.create(groupPolicyConfiguration)
+        const groupPolicyConfigurationId = groupPolicyConfigurationRes.id as string
+        const definitionValues: GroupPolicyDefinitionValue[] = []
+        for (const groupPolicyDefinitionValue of groupPolicyDefinitionValues) {
+            const res = await this.createPolicyDefinitionValue(
+                groupPolicyConfigurationId,
+                groupPolicyDefinitionValue,
+            )
+            definitionValues.push(res)
+        }
+        return {
+            ...groupPolicyConfigurationRes,
+            definitionValues,
+        }
+    }
+
+    async getWithDefinitionValues(
+        groupPolicyConfigurationId: string,
+    ): Promise<GroupPolicyConfiguration> {
+        const groupPolicyConfigurationRes = await this.get(groupPolicyConfigurationId)
+        const definitionValues = await this.listPolicyDefinitionValues(groupPolicyConfigurationId)
+        return {
+            ...groupPolicyConfigurationRes,
+            definitionValues,
+        }
+    }
+
     async createAssignment(
         groupPolicyConfigurationId: string,
         groupPolicyConfigurationAssignment: GroupPolicyConfigurationAssignment,
