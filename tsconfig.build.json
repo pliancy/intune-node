@@ -5,5 +5,5 @@
         
     },
     "include": ["src/**/*"],
-    "exclude": ["src/**/*.test.ts", "src/**/*.test.js", "src/test/**/*"]
+    "exclude": ["src/**/*.test.ts", "src/**/*.test.js"]
 }

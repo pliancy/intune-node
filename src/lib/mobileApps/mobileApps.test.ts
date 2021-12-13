@@ -1,10 +1,11 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { MobileApps } from './mobileApps'
-import { mockClient } from '../../test/mocks/@microsoft/microsoft-graph-client'
+import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { MobileApp, MobileAppContentFile } from '../types'
 require('isomorphic-fetch')
 
 describe('Device Configurations', () => {
+    let graphClient: Client
     let mobileApps: MobileApps
     const mobileApp = {
         name: 'test',
@@ -18,20 +19,17 @@ describe('Device Configurations', () => {
     }
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        graphClient = mockClient() as never as Client
+        mobileApps = new MobileApps(graphClient)
     })
 
     it('should get a app', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(mobileApp)
         const result = await mobileApps.get('')
         expect(result).toEqual(mobileApp)
     })
 
     it('should list apps', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
             value: [mobileApp],
             '@odata.nextLink': 'next',
@@ -42,8 +40,6 @@ describe('Device Configurations', () => {
     })
 
     it('should create a app', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         const spy = jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(mobileApp)
         const result = await mobileApps.create(mobileApp)
         expect(result).toEqual(mobileApp)
@@ -51,8 +47,6 @@ describe('Device Configurations', () => {
     })
 
     it('should update a app', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         const spy = jest.spyOn(graphClient.api(''), 'patch').mockResolvedValue(mobileApp)
         const result = await mobileApps.update('1', mobileApp)
         expect(result).toEqual(mobileApp)
@@ -60,8 +54,6 @@ describe('Device Configurations', () => {
     })
 
     it('should delete a app', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         jest.spyOn(graphClient.api(''), 'delete').mockResolvedValue(null)
         const spy = jest.spyOn(graphClient, 'api')
         const result = await mobileApps.delete('1')
@@ -70,16 +62,12 @@ describe('Device Configurations', () => {
     })
 
     it('should create a win32 lob content version', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         jest.spyOn(graphClient.api(''), 'post').mockResolvedValue({ id: 1 })
         const result = await mobileApps.createWin32LobContentVersion('1')
         expect(result).toEqual({ id: 1 })
     })
 
     it('should create a win32 lob file upload', async () => {
-        const graphClient = mockClient() as never as Client
-        mobileApps = new MobileApps(graphClient)
         jest.spyOn(graphClient.api(''), 'post').mockResolvedValue({ id: 1 })
         const result = await mobileApps.createWin32LobFileUpload('1', 1, {} as MobileAppContentFile)
         expect(result).toEqual({ id: 1 })

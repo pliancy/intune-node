@@ -1,6 +1,6 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { GroupPolicyConfigurations } from './groupPolicyConfigurations'
-import { mockClient } from '../../test/mocks/@microsoft/microsoft-graph-client'
+import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import {
     GroupPolicyConfiguration,
     GroupPolicyConfigurationAssignment,
@@ -8,6 +8,7 @@ import {
 } from '@microsoft/microsoft-graph-types-beta'
 
 describe('Device Configurations', () => {
+    let graphClient: Client
     let groupPolicyConfigurations: GroupPolicyConfigurations
     const groupPolicyConfiguration = {
         name: 'test',
@@ -25,17 +26,18 @@ describe('Device Configurations', () => {
         targetGroupId: '1',
     } as GroupPolicyConfigurationAssignment
 
-    it('should get a group policy configuration', async () => {
-        const graphClient = mockClient() as never as Client
+    beforeEach(() => {
+        graphClient = mockClient() as never as Client
         groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
+    })
+
+    it('should get a group policy configuration', async () => {
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(groupPolicyConfiguration)
         const result = await groupPolicyConfigurations.get('')
         expect(result).toEqual(groupPolicyConfiguration)
     })
 
     it('should list all group policy configurations', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
             value: [groupPolicyConfiguration],
             '@odata.nextLink': 'next',
@@ -49,32 +51,24 @@ describe('Device Configurations', () => {
     })
 
     it('should create a group policy configuration', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(groupPolicyConfiguration)
         const result = await groupPolicyConfigurations.create(groupPolicyConfiguration)
         expect(result).toEqual(groupPolicyConfiguration)
     })
 
     it('should update a group policy configuration', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'patch')
         const result = await groupPolicyConfigurations.update('id', groupPolicyConfiguration)
         expect(result).toBeUndefined()
     })
 
     it('should delete a group policy configuration', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'delete')
         const result = await groupPolicyConfigurations.delete('id')
         expect(result).toBeUndefined()
     })
 
     it('should get a group policy configuration and definition values', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce(groupPolicyConfiguration)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({ value: [definitionValue] })
         const result = await groupPolicyConfigurations.getWithDefinitionValues('1')
@@ -82,8 +76,6 @@ describe('Device Configurations', () => {
     })
 
     it('should create an assignment', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(groupAssignment)
         const spy = jest.spyOn(graphClient, 'api')
         const result = await groupPolicyConfigurations.createAssignment('id', groupAssignment)
@@ -94,24 +86,18 @@ describe('Device Configurations', () => {
     })
 
     it('should list assignments', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [groupAssignment] })
         const result = await groupPolicyConfigurations.listAssignments('id')
         expect(result).toEqual([groupAssignment])
     })
 
     it('should get an assignment', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(groupAssignment)
         const result = await groupPolicyConfigurations.getAssignment('id', 'groupAssignmentId')
         expect(result).toEqual(groupAssignment)
     })
 
     it('should delete an assignment', async () => {
-        const graphClient = mockClient() as never as Client
-        groupPolicyConfigurations = new GroupPolicyConfigurations(graphClient)
         jest.spyOn(graphClient.api(''), 'delete')
         const result = await groupPolicyConfigurations.deleteAssignment('id', 'groupId')
         expect(result).toBeUndefined()

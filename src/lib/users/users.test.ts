@@ -1,9 +1,10 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { Users } from './users'
-import { mockClient } from '../../test/mocks/@microsoft/microsoft-graph-client'
+import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { User } from '@microsoft/microsoft-graph-types-beta'
 
 describe('Device Configurations', () => {
+    let graphClient: Client
     let users: Users
     const user = {
         name: 'test',
@@ -14,18 +15,18 @@ describe('Device Configurations', () => {
         '@odata.type': '#microsoft.graph.deviceManagementScriptGroupAssignment',
         targetGroupId: '1',
     }
+    beforeEach(() => {
+        graphClient = mockClient() as never as Client
+        users = new Users(graphClient)
+    })
 
     it('should get a user', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(user)
         const result = await users.get('')
         expect(result).toEqual(user)
     })
 
     it('should list all users', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
             value: [users],
             '@odata.nextLink': 'next',
@@ -39,8 +40,6 @@ describe('Device Configurations', () => {
     })
 
     it('should update a user', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         const postSpy = jest.spyOn(graphClient.api(''), 'patch').mockResolvedValue(user)
         const result = await users.update('id', user)
         expect(result).toEqual(user)
@@ -48,8 +47,6 @@ describe('Device Configurations', () => {
     })
 
     it('should delete a user', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         const spy = jest.spyOn(graphClient, 'api')
         jest.spyOn(graphClient.api(''), 'patch')
         const result = await users.delete('id')
@@ -58,8 +55,6 @@ describe('Device Configurations', () => {
     })
 
     it('should create a user', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         const apiSpy = jest.spyOn(graphClient, 'api')
         const postSpy = jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(user)
         const result = await users.create(user)
@@ -69,8 +64,6 @@ describe('Device Configurations', () => {
     })
 
     it('should list all user app intent and states', async () => {
-        const graphClient = mockClient() as never as Client
-        users = new Users(graphClient)
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
             value: [{}],
             '@odata.nextLink': 'next',

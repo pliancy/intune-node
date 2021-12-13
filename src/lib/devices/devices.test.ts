@@ -1,15 +1,19 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { Devices } from './devices'
-import { mockClient } from '../../test/mocks/@microsoft/microsoft-graph-client'
+import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 
 describe('Devices', () => {
+    let graphClient: Client
     let devices: Devices
     const device = { id: '123' }
 
+    beforeEach(() => {
+        graphClient = mockClient() as never as Client
+        devices = new Devices(graphClient)
+    })
+
     describe('when finding devices', () => {
         it('should list all devices', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
                 value: [device],
                 '@odata.nextLink': 'next',
@@ -24,56 +28,42 @@ describe('Devices', () => {
         })
 
         it('should get one device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(device)
             const result = await devices.get('')
             expect(result).toEqual(device)
         })
 
         it('should update device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'patch').mockResolvedValue(device)
             const result = await devices.update('id', device)
             expect(result).toEqual(device)
         })
 
         it('should delete device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'delete')
             const result = await devices.delete('id')
             expect(result).toBeUndefined()
         })
 
         it('should get azure devices', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [device] })
             const result = await devices.getAzureAdDevices()
             expect(result).toEqual([device])
         })
 
         it('should get one azure device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(device)
             const result = await devices.getAzureAdDevice('')
             expect(result).toEqual(device)
         })
 
         it('should get autopilot devices', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [device] })
             const result = await devices.listAutopilotDevices()
             expect(result).toEqual([device])
         })
 
         it('should get an autopilot device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(device)
             const result = await devices.getAutopilotDevice('')
             expect(result).toEqual(device)
@@ -82,8 +72,6 @@ describe('Devices', () => {
 
     describe('when updating devices', () => {
         it('should set device name', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')
             await devices.setDeviceName('id', 'name')
@@ -93,8 +81,6 @@ describe('Devices', () => {
         })
 
         it('should reboot device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')
             await devices.rebootDevice('id')
@@ -104,8 +90,6 @@ describe('Devices', () => {
         })
 
         it('should retire device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')
             await devices.retireDevice('id')
@@ -115,8 +99,6 @@ describe('Devices', () => {
         })
 
         it('should shutdown device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')
             await devices.shutdownDevice('id')
@@ -126,8 +108,6 @@ describe('Devices', () => {
         })
 
         it('should wipe device', async () => {
-            const graphClient = mockClient() as never as Client
-            devices = new Devices(graphClient)
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')
             await devices.wipeDevice('id', true, false, true, '23')
