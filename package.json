@@ -17,12 +17,6 @@
     "test": "jest",
     "tsc": "tsc -p tsconfig.build.json"
   },
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "keywords": [],
   "author": "Santese Smith",
   "repository": {

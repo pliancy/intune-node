@@ -1,5 +1,5 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { Group, User } from '@microsoft/microsoft-graph-types-beta'
+import { Group } from '@microsoft/microsoft-graph-types-beta'
 export class Groups {
     constructor(private readonly graphClient: Client) {}
 
@@ -19,7 +19,7 @@ export class Groups {
         return this.graphClient.api(`/groups/${groupId}`).get()
     }
 
-    async update(groupId: string, group: Group): Promise<User> {
+    async update(groupId: string, group: Group): Promise<Group> {
         return this.graphClient.api(`/groups/${groupId}`).patch(group)
     }
 
@@ -27,7 +27,7 @@ export class Groups {
         return this.graphClient.api(`/groups/${groupId}`).delete()
     }
 
-    async create(group: Group): Promise<User> {
+    async create(group: Group): Promise<Group> {
         return this.graphClient.api('/groups').post(group)
     }
 }

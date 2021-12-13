@@ -10,4 +10,5 @@ export {
     GroupPolicyConfiguration,
     GroupPolicyConfigurationAssignment,
     GroupPolicyDefinitionValue,
+    Group,
 } from '@microsoft/microsoft-graph-types-beta'
