@@ -9,7 +9,7 @@ import { Users } from './users/users'
 
 describe('Intune', () => {
     it('creates component instances', () => {
-        const intune = Intune.init({
+        const intune = new Intune({
             tenantId: 'tenantId',
             authentication: { clientId: 'clientId', clientSecret: 'clientSecret' },
         })

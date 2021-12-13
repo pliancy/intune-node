@@ -24,7 +24,7 @@ Initialize with Client ID and Client Secret Auth:
 
 
 ```javascript
-  const intune = Intune.init({
+  const intune = new Intune({
     authentication: {
       clientId: '',
       clientSecret: ''

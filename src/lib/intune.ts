@@ -34,7 +34,16 @@ export class Intune {
 
     readonly customRequest: CustomRequest
 
-    private constructor(private readonly authProvider: TokenCredentialAuthenticationProvider) {
+    constructor(private readonly config: Config) {
+        const credential = new ClientSecretCredential(
+            this.config.tenantId,
+            this.config.authentication.clientId,
+            this.config.authentication.clientSecret,
+        )
+        const authProvider = new TokenCredentialAuthenticationProvider(credential, {
+            scopes: ['.default'],
+        })
+
         this.graphclient = Client.initWithMiddleware({
             authProvider,
             defaultVersion: 'beta',
@@ -49,17 +58,5 @@ export class Intune {
         this.users = new Users(this.graphclient)
         this.customRequest = new CustomRequest(this.graphclient)
         this.autopilot = new Autopilot(this.graphclient)
-    }
-
-    static init(config: Config) {
-        const credential = new ClientSecretCredential(
-            config.tenantId,
-            config.authentication.clientId,
-            config.authentication.clientSecret,
-        )
-        const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-            scopes: ['.default'],
-        })
-        return new Intune(authProvider)
     }
 }
