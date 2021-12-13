@@ -1,16 +1,16 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { AutoPilot } from './autopilot'
+import { Autopilot } from './autopilot'
 import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { AutoPilotUpload } from '../types'
 
 describe('AutoPilot', () => {
     let graphClient: Client
-    let autopilot: AutoPilot
+    let autopilot: Autopilot
     const device = { id: '123' }
 
     beforeEach(() => {
         graphClient = mockClient() as never as Client
-        autopilot = new AutoPilot(graphClient)
+        autopilot = new Autopilot(graphClient)
     })
 
     it('should get an autopilot device', async () => {

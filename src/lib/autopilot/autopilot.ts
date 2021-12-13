@@ -2,7 +2,7 @@ import { AutoPilotUpload } from '../types'
 import { Client } from '@microsoft/microsoft-graph-client'
 import { WindowsAutopilotDeviceIdentity } from '@microsoft/microsoft-graph-types-beta'
 
-export class AutoPilot {
+export class Autopilot {
     constructor(private readonly graphClient: Client) {}
 
     // Autopilot

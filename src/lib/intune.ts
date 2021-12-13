@@ -10,13 +10,13 @@ import { Groups } from './groups/groups'
 import { Users } from './users/users'
 import { GroupPolicyConfigurations } from './groupPolicyConfigurations/groupPolicyConfigurations'
 import { CustomRequest } from './customRequest/customRequest'
-import { AutoPilot } from './autopilot/autopilot'
+import { Autopilot } from './autopilot/autopilot'
 require('isomorphic-fetch')
 
 export class Intune {
     readonly graphclient: Client
 
-    readonly autoPilot: AutoPilot
+    readonly autopilot: Autopilot
 
     readonly devices: Devices
 
@@ -48,7 +48,7 @@ export class Intune {
         this.groupPolicyConfigurations = new GroupPolicyConfigurations(this.graphclient)
         this.users = new Users(this.graphclient)
         this.customRequest = new CustomRequest(this.graphclient)
-        this.autoPilot = new AutoPilot(this.graphclient)
+        this.autopilot = new Autopilot(this.graphclient)
     }
 
     static init(config: Config) {
