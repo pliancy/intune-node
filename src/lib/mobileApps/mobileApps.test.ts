@@ -4,7 +4,7 @@ import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-cli
 import { MobileApp, MobileAppContentFile } from '../types'
 require('isomorphic-fetch')
 
-describe('Device Configurations', () => {
+describe('Mobile Apps', () => {
     let graphClient: Client
     let mobileApps: MobileApps
     const mobileApp = {

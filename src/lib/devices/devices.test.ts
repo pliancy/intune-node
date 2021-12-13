@@ -47,25 +47,13 @@ describe('Devices', () => {
 
         it('should get azure devices', async () => {
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [device] })
-            const result = await devices.getAzureAdDevices()
+            const result = await devices.listAzureAdDevices()
             expect(result).toEqual([device])
         })
 
         it('should get one azure device', async () => {
             jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(device)
             const result = await devices.getAzureAdDevice('')
-            expect(result).toEqual(device)
-        })
-
-        it('should get autopilot devices', async () => {
-            jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [device] })
-            const result = await devices.listAutopilotDevices()
-            expect(result).toEqual([device])
-        })
-
-        it('should get an autopilot device', async () => {
-            jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(device)
-            const result = await devices.getAutopilotDevice('')
             expect(result).toEqual(device)
         })
     })

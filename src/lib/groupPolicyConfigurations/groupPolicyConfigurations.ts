@@ -111,6 +111,14 @@ export class GroupPolicyConfigurations {
             .delete()
     }
 
+    /**
+     * Creates a new Group Policy Configuration with definition values
+     *
+     * @param groupPolicyConfiguration - Group Policy Configuration to create
+     * @param groupPolicyDefinitionValues - Group Policy Definition Values to create
+     * @param mobileAppContentFile - the content info for the .intunewin file
+     * @returns the created Group Policy Configuration and the created Group Policy Definition Values
+     */
     async createWithDefinitionValues(
         groupPolicyConfiguration: GroupPolicyConfiguration,
         groupPolicyDefinitionValues: GroupPolicyDefinitionValue[],

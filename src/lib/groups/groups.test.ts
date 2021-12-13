@@ -3,7 +3,7 @@ import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-cli
 import { Group } from '@microsoft/microsoft-graph-types-beta'
 import { Groups } from './groups'
 
-describe('Device Configurations', () => {
+describe('Groups', () => {
     let graphClient: Client
     let groups: Groups
     const group = {

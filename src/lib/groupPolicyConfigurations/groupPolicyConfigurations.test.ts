@@ -7,7 +7,7 @@ import {
     GroupPolicyDefinitionValue,
 } from '@microsoft/microsoft-graph-types-beta'
 
-describe('Device Configurations', () => {
+describe('Group Policy Configurations', () => {
     let graphClient: Client
     let groupPolicyConfigurations: GroupPolicyConfigurations
     const groupPolicyConfiguration = {

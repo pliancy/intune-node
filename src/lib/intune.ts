@@ -9,10 +9,14 @@ import { MobileApps } from './mobileApps/mobileApps'
 import { Groups } from './groups/groups'
 import { Users } from './users/users'
 import { GroupPolicyConfigurations } from './groupPolicyConfigurations/groupPolicyConfigurations'
+import { CustomRequest } from './customRequest/customRequest'
+import { AutoPilot } from './autopilot/autopilot'
 require('isomorphic-fetch')
 
 export class Intune {
     readonly graphclient: Client
+
+    readonly autoPilot: AutoPilot
 
     readonly devices: Devices
 
@@ -28,6 +32,8 @@ export class Intune {
 
     readonly users: Users
 
+    readonly customRequest: CustomRequest
+
     private constructor(private readonly authProvider: TokenCredentialAuthenticationProvider) {
         this.graphclient = Client.initWithMiddleware({
             authProvider,
@@ -41,6 +47,8 @@ export class Intune {
         this.groups = new Groups(this.graphclient)
         this.groupPolicyConfigurations = new GroupPolicyConfigurations(this.graphclient)
         this.users = new Users(this.graphclient)
+        this.customRequest = new CustomRequest(this.graphclient)
+        this.autoPilot = new AutoPilot(this.graphclient)
     }
 
     static init(config: Config) {

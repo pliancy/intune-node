@@ -1,10 +1,5 @@
-import { AutoPilotUpload } from '../types'
 import { Client } from '@microsoft/microsoft-graph-client'
-import {
-    Device,
-    ManagedDevice,
-    WindowsAutopilotDeviceIdentity,
-} from '@microsoft/microsoft-graph-types-beta'
+import { Device, ManagedDevice } from '@microsoft/microsoft-graph-types-beta'
 
 export class Devices {
     constructor(private readonly graphClient: Client) {}
@@ -33,7 +28,7 @@ export class Devices {
         await this.graphClient.api(`/deviceManagement/managedDevices/${deviceId}`).delete()
     }
 
-    async getAzureAdDevices() {
+    async listAzureAdDevices() {
         let res = await this.graphClient.api('/devices').get()
         const devices: Device[] = res.value
         while (res['@odata.nextLink']) {
@@ -47,44 +42,6 @@ export class Devices {
 
     async getAzureAdDevice(deviceId: string): Promise<Device> {
         return this.graphClient.api(`/devices/${deviceId}`).get()
-    }
-
-    // Autopilot
-    async listAutopilotDevices() {
-        let res = await this.graphClient
-            .api('/deviceManagement/windowsAutopilotDeviceIdentities')
-            .get()
-        const devices: WindowsAutopilotDeviceIdentity[] = res.value
-        while (res['@odata.nextLink']) {
-            const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
-            res = await this.graphClient.api(nextLink).get()
-            const nextDevices = res.value as WindowsAutopilotDeviceIdentity[]
-            devices.push(...nextDevices)
-        }
-        return devices
-    }
-
-    async getAutopilotDevice(deviceId: string): Promise<WindowsAutopilotDeviceIdentity> {
-        return this.graphClient
-            .api(`/deviceManagement/windowsAutopilotDeviceIdentities/${deviceId}`)
-            .get()
-    }
-
-    async autopilotUpload(autoPilotUpload: AutoPilotUpload) {
-        const body = {
-            '@odata.type': '#microsoft.graph.importedWindowsAutopilotDeviceIdentity',
-            orderIdentifier: autoPilotUpload.groupTag ?? null,
-            serialNumber: autoPilotUpload.serialNumber ?? null,
-            productKey: autoPilotUpload.productKey ?? null,
-            hardwareIdentifier: autoPilotUpload.hardwareIdentifier ?? null,
-            assignedUserPrincipalName: autoPilotUpload.assignedUser ?? null,
-        }
-        const res = await this.graphClient
-            .api('/deviceManagement/importedWindowsAutopilotDeviceIdentities/import')
-            .post(body)
-
-        const device = res as WindowsAutopilotDeviceIdentity
-        return device
     }
 
     async setDeviceName(deviceId: string, newDeviceName: string): Promise<void> {

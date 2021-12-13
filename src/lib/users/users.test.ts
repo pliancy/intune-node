@@ -3,7 +3,7 @@ import { Users } from './users'
 import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { User } from '@microsoft/microsoft-graph-types-beta'
 
-describe('Device Configurations', () => {
+describe('Users', () => {
     let graphClient: Client
     let users: Users
     const user = {

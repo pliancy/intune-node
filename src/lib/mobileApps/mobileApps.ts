@@ -144,6 +144,15 @@ export class MobileApps {
         return res.uploadState
     }
 
+    /**
+     * Creates a new win32 lob app and uploads the file .intunewin file for the app, this requires that you first unecrypt the .intunewin file
+     *
+     * @param mobileApp - The mobile app info to create the app
+     * @param fileEncryptionInfo - the file encryption info for the .intunewin file
+     * @param mobileAppContentFile - the content info for the .intunewin file
+     * @param file - the unecrypted .intunewin file
+     * @returns the created app info
+     */
     async createWin32LobApp(
         mobileApp: Win32LobApp,
         fileEncryptionInfo: FileEncryptionInfo,
@@ -166,7 +175,7 @@ export class MobileApps {
         let azureStorageUri: string
         do {
             azureStorageUri = await this.getAzureStorageUri(appId, contentVersionId, fileId)
-
+            //  Need to sleep for a second before trying again
             sleep(1000)
         } while (!azureStorageUri)
 
@@ -177,7 +186,7 @@ export class MobileApps {
         let status: string
         do {
             status = await this.getFileUploadStatus(appId, contentVersionId, fileId)
-
+            //  Need to sleep for a second before trying again
             sleep(1000)
         } while (status !== 'commitFileSuccess')
 
@@ -186,6 +195,14 @@ export class MobileApps {
         return createApp
     }
 
+    /**
+     * Updates a win32 lob .intunewin file for the app
+     *
+     * @param appId - The App Id to update
+     * @param fileEncryptionInfo - the file encryption info for the .intunewin file
+     * @param mobileAppContentFile - the content info for the .intunewin file
+     * @param file - the unecrypted .intunewin file
+     */
     async updateWin32LobAppUpload(
         appId: string,
         fileEncryptionInfo: FileEncryptionInfo,

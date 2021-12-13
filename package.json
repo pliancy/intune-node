@@ -1,7 +1,7 @@
 {
   "name": "microsoft-intune",
   "version": "1.2.0",
-  "description": "",
+  "description": "sdk for Microsoft Intune",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -9,6 +9,7 @@
     "build:check": "tsc --noEmit",
     "clean": "rimraf coverage dist tmp",
     "copy": "pinst --disable && cpy package.json dist && cpy README.md dist && pinst --enable",
+    "generate-docs": "typedoc",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "postinstall": "husky install",
     "qa": "run-s -l lint test clean build:check",
@@ -35,7 +36,8 @@
     "@microsoft/microsoft-graph-client": "^3.0.1",
     "@types/node": "^16.11.12",
     "eslint": "^7.6.0",
-    "isomorphic-fetch": "^3.0.0"
+    "isomorphic-fetch": "^3.0.0",
+    "remove": "^0.1.5"
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types-beta": "^0.18.0-preview",
@@ -54,6 +56,8 @@
     "semantic-release": "^17.4.7",
     "ts-jest": "27.0.5",
     "ts-node": "^9.1.1",
+    "typedoc": "^0.22.10",
+    "typedoc-plugin-missing-exports": "^0.22.6",
     "typescript": "4.4.2"
   }
 }
