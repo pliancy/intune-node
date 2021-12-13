@@ -34,11 +34,8 @@
     "@azure/storage-blob": "^12.1.1",
     "@microsoft/microsoft-graph-client": "^3.0.1",
     "@types/node": "^16.11.12",
-    "axios": "^0.24.0",
     "eslint": "^7.6.0",
-    "got": "^11.0.2",
-    "isomorphic-fetch": "^3.0.0",
-    "module-alias": "^2.2.2"
+    "isomorphic-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types-beta": "^0.18.0-preview",
