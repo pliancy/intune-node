@@ -1,5 +1,7 @@
 # Microsoft Intune SDK
 
+[Full Documentation](https://pliancy.github.io/intune-node/) 
+
 ## Getting Started
 
 You can install the package with the following command:
@@ -118,7 +120,7 @@ await intune.mobileApps.create(officeApp)
 
 ### Create and Upload Win32 App from Stream
 
-This function requires the mobileApp Info, fileEncryptionInfo, mobileAppContentFile,  and the unencrypted .intunewin file . Some of the info for these objects is found in the detection.xml that's located in the extracted .intunewin file.
+This function requires the mobileApp Info, fileEncryptionInfo, mobileAppContentFile,  and the unencrypted .intunewin file . Some info for these objects is found in the detection.xml that's located in the extracted .intunewin file.
 
 ```javascript
 const mobileApp = {
