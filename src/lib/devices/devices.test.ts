@@ -77,6 +77,15 @@ describe('Devices', () => {
             expect(postSpy).toHaveBeenCalledWith({})
         })
 
+        it('should sync  device', async () => {
+            const apiSpy = jest.spyOn(graphClient, 'api')
+            const postSpy = jest.spyOn(graphClient.api(''), 'post')
+            await devices.syncDevice('id')
+
+            expect(apiSpy).toHaveBeenCalledWith(`/deviceManagement/managedDevices/id/syncDevice`)
+            expect(postSpy).toHaveBeenCalledWith({})
+        })
+
         it('should retire device', async () => {
             const apiSpy = jest.spyOn(graphClient, 'api')
             const postSpy = jest.spyOn(graphClient.api(''), 'post')

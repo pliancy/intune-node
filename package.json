@@ -63,5 +63,8 @@
       "path": "./node_modules/@digitalroute/cz-conventional-changelog-for-jira",
       "skipScope": false
     }
+  },
+  "volta": {
+    "node": "16.13.1"
   }
 }

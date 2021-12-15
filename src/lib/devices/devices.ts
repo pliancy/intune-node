@@ -60,6 +60,12 @@ export class Devices {
         return this.graphClient.api(`/deviceManagement/managedDevices/${deviceId}/retire`).post({})
     }
 
+    async syncDevice(deviceId: string): Promise<void> {
+        return this.graphClient
+            .api(`/deviceManagement/managedDevices/${deviceId}/syncDevice`)
+            .post({})
+    }
+
     async shutdownDevice(deviceId: string): Promise<void> {
         return this.graphClient
             .api(`/deviceManagement/managedDevices/${deviceId}/shutDown`)
