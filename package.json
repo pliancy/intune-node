@@ -8,6 +8,7 @@
     "build": "run-s -l clean test tsc copy",
     "build:check": "tsc --noEmit",
     "clean": "rimraf coverage dist tmp",
+    "commit": "cz",
     "copy": "pinst --disable && cpy package.json dist && cpy README.md dist && pinst --enable",
     "generate-docs": "typedoc",
     "lint": "eslint \"src/**/*.ts\" --fix",
@@ -61,7 +62,8 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/@digitalroute/cz-conventional-changelog-for-jira",
-      "skipScope": false
+      "skipScope": false,
+      "jiraOptional": true
     }
   },
   "volta": {
