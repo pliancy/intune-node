@@ -29,7 +29,7 @@
   "dependencies": {
     "@azure/storage-blob": "^12.1.1",
     "@types/qs": "^6.9.1",
-    "eslint": "^7.6.0",
+    "eslint": "^8.11.0",
     "got": "^11.0.2"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "typedoc": "^0.17.6",
     "typescript": "^3.8.3",
     "@types/eslint": "^7.2.0",
-    "eslint": "^7.6.0",
+    "eslint": "^8.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-formatter-pretty": "^4.0.0"
   }
