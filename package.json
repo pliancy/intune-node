@@ -36,28 +36,28 @@
     "remove": "^0.1.5"
   },
   "devDependencies": {
-    "@digitalroute/cz-conventional-changelog-for-jira": "7.0.0",
+    "@digitalroute/cz-conventional-changelog-for-jira": "7.3.0",
     "@pliancy/eslint-config-ts": "0.0.5",
-    "@pliancy/semantic-release-config-npm": "2.1.0",
+    "@pliancy/semantic-release-config-npm": "2.2.0",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "8.0.2",
+    "@semantic-release/github": "8.0.4",
     "@semantic-release/npm": "8.0.3",
-    "@types/isomorphic-fetch": "0.0.35",
-    "@types/jest": "27.0.1",
+    "@types/isomorphic-fetch": "0.0.36",
+    "@types/jest": "27.4.1",
     "@types/qs": "6.9.7",
     "commitizen": "4.2.4",
     "cpy-cli": "3.1.1",
-    "husky": "7.0.2",
-    "jest": "27.4.3",
+    "husky": "7.0.4",
+    "jest": "27.5.1",
     "npm-run-all": "4.1.5",
     "pinst": "2.1.6",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.7",
-    "ts-jest": "27.0.5",
+    "ts-jest": "27.1.4",
     "ts-node": "9.1.1",
-    "typedoc": "0.22.10",
+    "typedoc": "0.22.15",
     "typedoc-plugin-missing-exports": "0.22.6",
-    "typescript": "4.4.2"
+    "typescript": "4.6.3"
   },
   "config": {
     "commitizen": {
@@ -67,6 +67,6 @@
     }
   },
   "volta": {
-    "node": "16.13.1"
+    "node": "16.14.2"
   }
 }
