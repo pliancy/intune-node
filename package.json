@@ -31,7 +31,7 @@
     "@microsoft/microsoft-graph-client": "^3.0.1",
     "@microsoft/microsoft-graph-types-beta": "^0.18.0-preview",
     "@types/node": "^16.11.12",
-    "eslint": "^7.6.0",
+    "eslint": "^8.13.0",
     "isomorphic-fetch": "^3.0.0",
     "remove": "^0.1.5"
   },
