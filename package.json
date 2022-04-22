@@ -26,14 +26,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@azure/identity": "^2.0.1",
-    "@azure/storage-blob": "^12.1.1",
-    "@microsoft/microsoft-graph-client": "^3.0.1",
-    "@microsoft/microsoft-graph-types-beta": "^0.18.0-preview",
-    "@types/node": "^16.11.12",
-    "eslint": "^7.6.0",
-    "isomorphic-fetch": "^3.0.0",
-    "remove": "^0.1.5"
+    "@azure/identity": "2.0.1",
+    "@azure/storage-blob": "12.1.1",
+    "@microsoft/microsoft-graph-client": "3.0.1",
+    "@microsoft/microsoft-graph-types-beta": "0.18.0-preview",
+    "@types/node": "16.11.12",
+    "isomorphic-fetch": "3.0.0",
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@digitalroute/cz-conventional-changelog-for-jira": "7.3.0",
