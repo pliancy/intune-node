@@ -121,7 +121,7 @@ export class MobileApps {
             .api(
                 `/deviceAppManagement/mobileApps/${appId}/microsoft.graph.win32LobApp/contentversions/${contentVersionId}/files/${fileId}/commit`,
             )
-            .post(fileEncryptionInfo)
+            .post({ fileEncryptionInfo })
     }
 
     async commitWin32LobApp(appId: string, contentVersionId: number) {
