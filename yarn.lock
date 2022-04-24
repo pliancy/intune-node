@@ -1010,18 +1010,18 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@microsoft/microsoft-graph-client@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-client/-/microsoft-graph-client-3.0.1.tgz#f82152ae66a932b29ca2cf01ff4eb35bf4c62d05"
-  integrity sha512-sudEc1kKMsdtEI6IZfnTL8JUQ1a7pmV7D/ID2n/fsZCZH3MKi2vZ9XeKZfnFAbgaGcNT2bl55w8fcV3vBljJXA==
+"@microsoft/microsoft-graph-client@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-client/-/microsoft-graph-client-3.0.2.tgz#74b2ed8db24a3d2ad83f3f80b75b3d7ad78144fa"
+  integrity sha512-eYDiApYmiGsm1s1jfAa/rhB2xQCsX4pWt0vCTd1LZmiApMQfT/c0hXj2hvpuGz5GrcLdugbu05xB79rIV57Pjw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     tslib "^2.2.0"
 
-"@microsoft/microsoft-graph-types-beta@0.18.0-preview":
-  version "0.18.0-preview"
-  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-types-beta/-/microsoft-graph-types-beta-0.18.0-preview.tgz#841b496ed2ae86d6194cfdfa8b7da36babb519ff"
-  integrity sha512-//OdUVbwvRxSd7W2zMl5ywQCAwGfEH21u6B+yz6NpYd+lZJGR/na1M85uFhcU5zIK6K2J0ReP7mH6FqQn8uyhg==
+"@microsoft/microsoft-graph-types-beta@0.28.0-preview":
+  version "0.28.0-preview"
+  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-types-beta/-/microsoft-graph-types-beta-0.28.0-preview.tgz#4c6573805b8dc9f7c44ea228b3532fea006534c5"
+  integrity sha512-VCKIIFk9FevNz/CsBE1qXR+h/mohTo2M8AcCM74hfwRAZMvoGyVukYShcCL9sS20jZ+jeeyyhOGINenijdSB1Q==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -7968,6 +7968,11 @@ ts-node@9.1.1, ts-node@^9:
     source-map-support "^0.5.17"
     yn "3.1.1"
 
+tslib@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
 tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
@@ -7977,11 +7982,6 @@ tslib@^2, tslib@^2.0.0, tslib@^2.2.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
-
-tslib@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tsutils@^3.21.0:
   version "3.21.0"

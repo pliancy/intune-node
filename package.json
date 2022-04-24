@@ -28,11 +28,10 @@
   "dependencies": {
     "@azure/identity": "2.0.1",
     "@azure/storage-blob": "12.1.1",
-    "@microsoft/microsoft-graph-client": "3.0.1",
-    "@microsoft/microsoft-graph-types-beta": "0.18.0-preview",
-    "@types/node": "16.11.12",
+    "@microsoft/microsoft-graph-client": "3.0.2",
+    "@microsoft/microsoft-graph-types-beta": "0.28.0-preview",
     "isomorphic-fetch": "3.0.0",
-    "tslib": "^2.4.0"
+    "tslib": "2.4.0"
   },
   "devDependencies": {
     "@digitalroute/cz-conventional-changelog-for-jira": "7.3.0",
@@ -43,6 +42,7 @@
     "@semantic-release/npm": "8.0.3",
     "@types/isomorphic-fetch": "0.0.36",
     "@types/jest": "27.4.1",
+    "@types/node": "16.11.12",
     "@types/qs": "6.9.7",
     "commitizen": "4.2.4",
     "cpy-cli": "3.1.1",
