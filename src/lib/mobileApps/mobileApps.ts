@@ -121,7 +121,7 @@ export class MobileApps {
             .api(
                 `/deviceAppManagement/mobileApps/${appId}/microsoft.graph.win32LobApp/contentversions/${contentVersionId}/files/${fileId}/commit`,
             )
-            .post({ fileEncryptionInfo })
+            .post(fileEncryptionInfo)
     }
 
     async commitWin32LobApp(appId: string, contentVersionId: number) {
@@ -238,7 +238,7 @@ export class MobileApps {
 
     async listAppRelationships(appId: string) {
         let res = await this.graphClient
-            .api('/deviceAppManagement/mobileApps/${appId}/relationships`')
+            .api(`/deviceAppManagement/mobileApps/${appId}/relationships`)
             .get()
         const appRelationships: MobileAppRelationship[] = res.value
 
