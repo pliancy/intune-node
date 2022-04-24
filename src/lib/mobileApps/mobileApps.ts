@@ -260,18 +260,26 @@ export class MobileApps {
             .get()
     }
 
+    //Forced to use the updateRelationship endpoint since the relationship post method is not working(https://docs.microsoft.com/en-us/graph/api/intune-apps-mobileappdependency-create?view=graph-rest-beta)
     async createAppRelationship(
         appId: string,
         relationship: MobileAppRelationship,
     ): Promise<MobileAppRelationship> {
-        return this.graphClient
-            .api(`/deviceAppManagement/mobileApps/${appId}/dependencies`)
-            .post(relationship)
+        const relationships = (await this.listAppRelationships(appId)) ?? []
+        relationships.push(relationship)
+        await this.graphClient
+            .api(`/deviceAppManagement/mobileApps/${appId}/updateRelationships`)
+            .post({ relationships: relationships })
+        const updatedRelationships = await this.listAppRelationships(appId)
+        const res = updatedRelationships.find(
+            (appRelationship) => appRelationship.targetId === relationship.targetId,
+        ) as MobileAppRelationship
+        return res
     }
 
     async deleteAppRelationship(appId: string, relationshipId: string): Promise<void> {
         return this.graphClient
-            .api(`/deviceAppManagement/mobileApps/${appId}/dependencies/${relationshipId}`)
+            .api(`/deviceAppManagement/mobileApps/${appId}/relationships/${relationshipId}`)
             .delete()
     }
 
@@ -281,7 +289,7 @@ export class MobileApps {
         relationship: MobileAppRelationship,
     ): Promise<MobileAppRelationship> {
         return this.graphClient
-            .api(`/deviceAppManagement/mobileApps/${appId}/dependencies/${relationshipId}`)
+            .api(`/deviceAppManagement/mobileApps/${appId}/relationships/${relationshipId}`)
             .patch(relationship)
     }
     async createAssignment(
