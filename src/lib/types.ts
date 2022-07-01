@@ -133,7 +133,7 @@ export interface WindowsMobileMSI extends Graph.WindowsMobileMSI {
     '@odata.type': '#microsoft.graph.windowsMobileMSI'
 }
 
-export interface ReadStream extends NodeJS.ReadStream { }
+export interface ReadStream extends NodeJS.ReadStream {}
 
 export interface MobileAppDependency extends Graph.MobileAppDependency {
     '@odata.type': '#microsoft.graph.mobileAppDependency'

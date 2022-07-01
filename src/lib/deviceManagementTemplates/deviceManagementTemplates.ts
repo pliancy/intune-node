@@ -2,7 +2,7 @@ import { Client } from '@microsoft/microsoft-graph-client'
 import { CreateTemplateInstance, DeviceManagementIntent, DeviceManagementTemplate } from '../types'
 
 export class DeviceManagementTemplates {
-    constructor(private readonly graphClient: Client) { }
+    constructor(private readonly graphClient: Client) {}
 
     async list() {
         let res = await this.graphClient.api('/deviceManagement/templates').get()
