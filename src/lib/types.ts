@@ -133,7 +133,7 @@ export interface WindowsMobileMSI extends Graph.WindowsMobileMSI {
     '@odata.type': '#microsoft.graph.windowsMobileMSI'
 }
 
-export interface ReadStream extends NodeJS.ReadStream {}
+export interface ReadStream extends NodeJS.ReadStream { }
 
 export interface MobileAppDependency extends Graph.MobileAppDependency {
     '@odata.type': '#microsoft.graph.mobileAppDependency'
@@ -147,4 +147,23 @@ export type MobileAppRelationship = MobileAppDependency | MobileAppSupersedence
 
 export interface MobileAppAssignment extends Graph.MobileAppAssignment {
     '@odata.type': '#microsoft.graph.mobileAppAssignment'
+}
+
+export interface DeviceManagementTemplate extends Graph.DeviceManagementTemplate {
+    '@odata.type': '#microsoft.graph.deviceManagementTemplate'
+}
+
+export interface DeviceManagementSettingInstance extends Graph.DeviceManagementSettingInstance {
+    '@odata.type': '#microsoft.graph.deviceManagementSettingInstance'
+}
+
+export interface CreateTemplateInstance {
+    displayName: string
+    description: string
+    settingsDelta: DeviceManagementSettingInstance[]
+    roleScopeTagIds: string[]
+}
+
+export interface DeviceManagementIntent extends Graph.DeviceManagementIntent {
+    '@odata.type': '#microsoft.graph.deviceManagementIntent'
 }
