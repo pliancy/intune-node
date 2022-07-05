@@ -6,14 +6,14 @@ export class DeviceManagementTemplates {
 
     async list() {
         let res = await this.graphClient.api('/deviceManagement/templates').get()
-        const scripts: DeviceManagementTemplate[] = res.value
+        const templates: DeviceManagementTemplate[] = res.value
         while (res['@odata.nextLink']) {
             const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
             res = await this.graphClient.api(nextLink).get()
-            const nextScripts = res.value as DeviceManagementTemplate[]
-            scripts.push(...nextScripts)
+            const nextTemplates = res.value as DeviceManagementTemplate[]
+            templates.push(...nextTemplates)
         }
-        return scripts
+        return templates
     }
 
     async get(id: string): Promise<DeviceManagementTemplate> {
