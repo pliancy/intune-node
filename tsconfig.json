@@ -15,7 +15,7 @@
       "declaration": true,
       "skipLibCheck": true,
       "outDir": "dist",
-      "baseUrl": ".",
+      "baseUrl": "src",
       
   },
   "include": ["src/**/*"]
