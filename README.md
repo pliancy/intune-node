@@ -34,7 +34,6 @@ Initialize with Client ID and Client Secret Auth:
 ```
 
 
-
 ## Example Usage
 
 ### Get all Intune Devices
