@@ -12,6 +12,7 @@ import { GroupPolicyConfigurations } from './groupPolicyConfigurations/groupPoli
 import { CustomRequest } from './customRequest/customRequest'
 import { Autopilot } from './autopilot/autopilot'
 import { DeviceManagementTemplates } from './deviceManagementTemplates/deviceManagementTemplates'
+import { DeviceManagementIntents } from './deviceManagementIntents/deviceManagementIntents'
 require('isomorphic-fetch')
 
 export class Intune {
@@ -36,6 +37,8 @@ export class Intune {
     readonly customRequest: CustomRequest
 
     readonly deviceManagementTemplates: DeviceManagementTemplates
+
+    readonly deviceManagementIntents: DeviceManagementIntents
 
     constructor(private readonly config: Config) {
         const credential = new ClientSecretCredential(
@@ -62,5 +65,6 @@ export class Intune {
         this.customRequest = new CustomRequest(this.graphclient)
         this.autopilot = new Autopilot(this.graphclient)
         this.deviceManagementTemplates = new DeviceManagementTemplates(this.graphclient)
+        this.deviceManagementIntents = new DeviceManagementIntents(this.graphclient)
     }
 }
