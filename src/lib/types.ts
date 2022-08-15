@@ -157,6 +157,10 @@ export interface DeviceManagementSettingInstance extends Graph.DeviceManagementS
     '@odata.type': '#microsoft.graph.deviceManagementSettingInstance'
 }
 
+export interface DeviceManagementIntent extends Graph.DeviceManagementIntent {
+    '@odata.type': '#microsoft.graph.deviceManagementIntent'
+}
+
 export interface CreateTemplateInstance {
     displayName: string
     description: string
