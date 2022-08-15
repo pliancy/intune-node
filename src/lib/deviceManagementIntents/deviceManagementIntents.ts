@@ -1,6 +1,6 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { Group } from '@microsoft/microsoft-graph-types-beta'
-import { DeviceManagementIntent } from 'lib/types'
+import { DeviceManagementIntent } from '../types'
 
 export class DeviceManagementIntents {
     constructor(private readonly graphClient: Client) {}

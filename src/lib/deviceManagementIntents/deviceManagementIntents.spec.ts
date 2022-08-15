@@ -1,5 +1,5 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { DeviceManagementIntent } from 'lib/types'
+import { DeviceManagementIntent } from '../types'
 import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { DeviceManagementIntents } from './deviceManagementIntents'
 
