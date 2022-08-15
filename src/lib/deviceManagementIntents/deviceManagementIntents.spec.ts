@@ -47,7 +47,7 @@ describe('DeviceManagementIntents', () => {
         jest.spyOn(graphClient.api(''), 'patch')
         const result = await deviceManagementIntents.delete('id')
         expect(result).toBeUndefined()
-        expect(spy).toHaveBeenCalledWith('/deviceManagement/intent/id')
+        expect(spy).toHaveBeenCalledWith('/deviceManagement/intents/id')
     })
 
     it('should create a intent', async () => {
@@ -55,7 +55,7 @@ describe('DeviceManagementIntents', () => {
         const postSpy = jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(intent)
         const result = await deviceManagementIntents.create(intent)
         expect(result).toEqual(intent)
-        expect(apiSpy).toHaveBeenCalledWith('/deviceManagement/intent')
+        expect(apiSpy).toHaveBeenCalledWith('/deviceManagement/intents')
         expect(postSpy).toHaveBeenCalledWith(intent)
     })
 })

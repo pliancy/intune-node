@@ -18,21 +18,21 @@ export class DeviceManagementIntents {
     }
 
     async get(intentId: string): Promise<Group> {
-        return this.graphClient.api(`/deviceManagement/intent/${intentId}`).get()
+        return this.graphClient.api(`/deviceManagement/intents/${intentId}`).get()
     }
 
     async update(
         intentId: string,
         intent: DeviceManagementIntent,
     ): Promise<DeviceManagementIntent> {
-        return this.graphClient.api(`/deviceManagement/intent/${intentId}`).patch(intent)
+        return this.graphClient.api(`/deviceManagement/intents/${intentId}`).patch(intent)
     }
 
     async delete(intentId: string): Promise<void> {
-        return this.graphClient.api(`/deviceManagement/intent/${intentId}`).delete()
+        return this.graphClient.api(`/deviceManagement/intents/${intentId}`).delete()
     }
 
     async create(intent: DeviceManagementIntent): Promise<DeviceManagementIntent> {
-        return this.graphClient.api('/deviceManagement/intent').post(intent)
+        return this.graphClient.api('/deviceManagement/intents').post(intent)
     }
 }
