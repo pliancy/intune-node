@@ -45,7 +45,7 @@
     "@types/node": "16.11.12",
     "@types/qs": "6.9.7",
     "commitizen": "4.2.4",
-    "cpy-cli": "3.1.1",
+    "cpy-cli": "4.2.0",
     "husky": "7.0.4",
     "jest": "28.1.3",
     "npm-run-all": "4.1.5",
