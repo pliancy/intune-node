@@ -3,7 +3,7 @@ import { DeviceHealthScript, DeviceHealthScriptAssignment } from 'lib/types'
 import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 import { DeviceHealthScripts } from './deviceHealthScripts'
 
-describe('Device Management Scripts', () => {
+describe('Device Health Scripts', () => {
     let graphClient: Client
     let deviceHealthScripts: DeviceHealthScripts
     const deviceHealthScript = {
@@ -54,25 +54,25 @@ describe('Device Management Scripts', () => {
         expect(result).toBeUndefined()
     })
 
-    it('should create a group assignment', async () => {
+    it('should create an assignment', async () => {
         jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(assignment)
         const result = await deviceHealthScripts.createAssignment('id', assignment)
         expect(result).toEqual(assignment)
     })
 
-    it('should list group assignments', async () => {
+    it('should list assignments', async () => {
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [assignment] })
         const result = await deviceHealthScripts.listAssignments('id')
         expect(result).toEqual([assignment])
     })
 
-    it('should get a group assignment', async () => {
+    it('should get an assignment', async () => {
         jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(assignment)
         const result = await deviceHealthScripts.getAssignment('id', 'groupAssignmentId')
         expect(result).toEqual(assignment)
     })
 
-    it('should delete a group assignment', async () => {
+    it('should delete an assignment', async () => {
         jest.spyOn(graphClient.api(''), 'delete')
         const result = await deviceHealthScripts.deleteAssignment('id', 'groupId')
         expect(result).toBeUndefined()
