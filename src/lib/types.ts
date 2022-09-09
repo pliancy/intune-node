@@ -171,3 +171,11 @@ export interface CreateTemplateInstance {
 export interface DeviceManagementIntent extends Graph.DeviceManagementIntent {
     '@odata.type': '#microsoft.graph.deviceManagementIntent'
 }
+
+export interface DeviceHealthScript extends Graph.DeviceHealthScript {
+    '@odata.type': '#microsoft.graph.deviceHealthScript'
+}
+
+export interface DeviceHealthScriptAssignment extends Graph.DeviceHealthScriptAssignment {
+    '@odata.type': '#microsoft.graph.deviceHealthScriptAssignment'
+}

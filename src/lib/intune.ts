@@ -13,6 +13,7 @@ import { CustomRequest } from './customRequest/customRequest'
 import { Autopilot } from './autopilot/autopilot'
 import { DeviceManagementTemplates } from './deviceManagementTemplates/deviceManagementTemplates'
 import { DeviceManagementIntents } from './deviceManagementIntents/deviceManagementIntents'
+import { DeviceHealthScripts } from './deviceHealthScripts/deviceHealthScripts'
 require('isomorphic-fetch')
 
 export class Intune {
@@ -23,6 +24,8 @@ export class Intune {
     readonly devices: Devices
 
     readonly deviceConfigurations: DeviceConfigurations
+
+    readonly deviceHealthScripts: DeviceHealthScripts
 
     readonly deviceManagementScripts: DeviceManagementScripts
 
@@ -66,5 +69,6 @@ export class Intune {
         this.autopilot = new Autopilot(this.graphclient)
         this.deviceManagementTemplates = new DeviceManagementTemplates(this.graphclient)
         this.deviceManagementIntents = new DeviceManagementIntents(this.graphclient)
+        this.deviceHealthScripts = new DeviceHealthScripts(this.graphclient)
     }
 }

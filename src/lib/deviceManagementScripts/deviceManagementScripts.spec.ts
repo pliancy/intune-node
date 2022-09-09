@@ -2,7 +2,7 @@ import { Client } from '@microsoft/microsoft-graph-client'
 import { DeviceManagementScripts } from './deviceManagementScripts'
 import { mockClient } from '../../../__fixtures__/@microsoft/microsoft-graph-client'
 
-describe('Devices Managament Scripts', () => {
+describe('Device Management Scripts', () => {
     let graphClient: Client
     let deviceManagementScripts: DeviceManagementScripts
     const deviceManagementScript = {
