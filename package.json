@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@digitalroute/cz-conventional-changelog-for-jira": "8.0.1",
-    "@pliancy/eslint-config-ts": "0.0.5",
+    "@pliancy/eslint-config-ts": "0.1.0",
     "@pliancy/semantic-release-config-npm": "2.2.0",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.4",
