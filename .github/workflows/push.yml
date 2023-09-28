@@ -8,12 +8,12 @@ jobs:
   qa:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js 14
-        uses: actions/setup-node@v2
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 20.x
 
       - name: Install Dependencies
         run: yarn
