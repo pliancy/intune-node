@@ -22,7 +22,7 @@
   "author": "Santese Smith",
   "repository": {
     "type": "git",
-    "url": "https://github.com/santese/intune-node.git"
+    "url": "https://github.com/pliancy/intune-node"
   },
   "license": "MIT",
   "dependencies": {
