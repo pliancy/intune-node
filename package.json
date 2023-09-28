@@ -34,7 +34,7 @@
     "tslib": "2.4.0"
   },
   "devDependencies": {
-    "@digitalroute/cz-conventional-changelog-for-jira": "7.3.0",
+    "@digitalroute/cz-conventional-changelog-for-jira": "8.0.1",
     "@pliancy/eslint-config-ts": "0.0.5",
     "@pliancy/semantic-release-config-npm": "2.2.0",
     "@semantic-release/git": "10.0.1",
