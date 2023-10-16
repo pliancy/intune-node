@@ -1,7 +1,5 @@
 import { Config } from './types'
 import { Client } from '@microsoft/microsoft-graph-client'
-import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials'
-import { ClientSecretCredential } from '@azure/identity'
 import { Devices } from './devices/devices'
 import { DeviceConfigurations } from './deviceConfigurations/deviceConfigurations'
 import { DeviceManagementScripts } from './deviceManagementScripts/deviceManagementScripts'
@@ -14,6 +12,7 @@ import { Autopilot } from './autopilot/autopilot'
 import { DeviceManagementTemplates } from './deviceManagementTemplates/deviceManagementTemplates'
 import { DeviceManagementIntents } from './deviceManagementIntents/deviceManagementIntents'
 import { DeviceHealthScripts } from './deviceHealthScripts/deviceHealthScripts'
+import { AuthProvider } from './utils/auth-provider'
 require('isomorphic-fetch')
 
 export class Intune {
@@ -44,17 +43,10 @@ export class Intune {
     readonly deviceManagementIntents: DeviceManagementIntents
 
     constructor(private readonly config: Config) {
-        const credential = new ClientSecretCredential(
-            this.config.tenantId,
-            this.config.authentication.clientId,
-            this.config.authentication.clientSecret,
-        )
-        const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-            scopes: ['.default'],
-        })
+        const authProvider = new AuthProvider(this.config)
 
         this.graphclient = Client.initWithMiddleware({
-            authProvider,
+            authProvider: authProvider,
             defaultVersion: 'beta',
         })
 

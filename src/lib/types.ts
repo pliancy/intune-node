@@ -8,6 +8,7 @@ export interface Config {
 export interface ClientAuth {
     clientId: string
     clientSecret: string
+    refreshToken?: string
 }
 
 export interface AutoPilotUpload {
