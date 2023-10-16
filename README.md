@@ -33,7 +33,7 @@ Initialize with Client ID and Client Secret Auth:
   })
 ```
 
-Optioinally Pass Refresh Token to use refresh_token auth
+Optionally Pass a Refresh token to use refresh_token auth
 
 ```javascript
  const intune = new Intune({
