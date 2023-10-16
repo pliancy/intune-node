@@ -21,10 +21,18 @@ describe('AuthProvider', () => {
         }
 
         mockedAxios.post.mockResolvedValue({
-            data: { access_token: 'mockAccessToken' },
+            data: {
+                access_token: 'mockAccessToken',
+                refresh_token: 'mockUpdatedRefreshToken',
+            },
         })
 
         const authProvider = new AuthProvider(mockConfig)
+
+        // Check that refresh token is set with the value from config
+        expect(authProvider.refreshToken).toBe('mockRefreshToken')
+
+        // Get access token
         const result = await authProvider.getAccessToken()
 
         expect(result).toBe('mockAccessToken')
@@ -41,6 +49,9 @@ describe('AuthProvider', () => {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             },
         )
+
+        // Check that refresh token is updated with the value from response
+        expect(authProvider.refreshToken).toBe('mockUpdatedRefreshToken')
     })
 
     it('should get access token using client credentials if refresh token is not provided', async () => {
@@ -72,5 +83,6 @@ describe('AuthProvider', () => {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             },
         )
+        expect(authProvider.refreshToken).toBeUndefined()
     })
 })

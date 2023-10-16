@@ -42,11 +42,13 @@ export class Intune {
 
     readonly deviceManagementIntents: DeviceManagementIntents
 
+    private readonly authProvider: AuthProvider
+
     constructor(private readonly config: Config) {
-        const authProvider = new AuthProvider(this.config)
+        this.authProvider = new AuthProvider(this.config)
 
         this.graphclient = Client.initWithMiddleware({
-            authProvider: authProvider,
+            authProvider: this.authProvider,
             defaultVersion: 'beta',
         })
 
@@ -62,5 +64,13 @@ export class Intune {
         this.deviceManagementTemplates = new DeviceManagementTemplates(this.graphclient)
         this.deviceManagementIntents = new DeviceManagementIntents(this.graphclient)
         this.deviceHealthScripts = new DeviceHealthScripts(this.graphclient)
+    }
+
+    /**
+     * Get the current refresh token
+     * @returns {Promise<string>} The current refresh token
+     */
+    get refreshToken(): string | undefined {
+        return this.authProvider.refreshToken
     }
 }
