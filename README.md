@@ -33,6 +33,24 @@ Initialize with Client ID and Client Secret Auth:
   })
 ```
 
+Optionally Pass a Refresh token to use refresh_token auth
+
+```javascript
+ const intune = new Intune({
+    authentication: {
+      clientId: '',
+      clientSecret: ''
+      refreshToken: ''
+    },
+    tenantId: ''
+  })
+```
+
+Updated refreshToken from Microsoft can be accessed from:
+
+```javascript
+intune.refreshToken
+```
 
 ## Example Usage
 
