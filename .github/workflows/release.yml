@@ -34,7 +34,7 @@ jobs:
           npx pinst --enable
       # Commit changes to package.json and README.md
       - name: Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         env:
           SKIP_COMMITIZEN: true
         with:
