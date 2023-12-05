@@ -57,3 +57,6 @@ jobs:
 
           # Optional. Skip internal call to `git fetch`
           skip_fetch: true
+
+          # PliBot is allowed to force-push, bypassing the branch protections
+          push_options: --force
