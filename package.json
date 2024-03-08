@@ -43,7 +43,7 @@
     "@semantic-release/npm": "11.0.3",
     "@types/isomorphic-fetch": "0.0.39",
     "@types/jest": "29.5.12",
-    "@types/node": "18.19.22",
+    "@types/node": "20.11.25",
     "@types/qs": "6.9.12",
     "commitizen": "4.3.0",
     "cpy-cli": "5.0.0",
@@ -67,6 +67,6 @@
     }
   },
   "volta": {
-    "node": "18.19.1"
+    "node": "20.11.1"
   }
 }
