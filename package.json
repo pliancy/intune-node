@@ -29,7 +29,7 @@
     "@azure/storage-blob": "12.17.0",
     "@microsoft/microsoft-graph-client": "3.0.7",
     "@microsoft/microsoft-graph-types-beta": "0.40.0-preview",
-    "axios": "^1.5.1",
+    "axios": "1.6.7",
     "isomorphic-fetch": "3.0.0",
     "qs": "^6.11.2",
     "tslib": "2.6.2"
