@@ -1,6 +1,6 @@
 {
   "name": "microsoft-intune",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "sdk for Microsoft Intune",
   "main": "index.js",
   "types": "index.d.ts",
