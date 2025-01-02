@@ -11,4 +11,5 @@ export {
     GroupPolicyConfigurationAssignment,
     GroupPolicyDefinitionValue,
     Group,
+    DetectedApp,
 } from '@microsoft/microsoft-graph-types-beta'

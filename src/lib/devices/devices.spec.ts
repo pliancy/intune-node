@@ -56,6 +56,12 @@ describe('Devices', () => {
             const result = await devices.getAzureAdDevice('')
             expect(result).toEqual(device)
         })
+
+        it('should list  detected apps', async () => {
+            jest.spyOn(graphClient.api(''), 'get').mockResolvedValue({ value: [device] })
+            const result = await devices.listDetectedApps('id')
+            expect(result).toEqual([device])
+        })
     })
 
     describe('when updating devices', () => {
@@ -116,6 +122,26 @@ describe('Devices', () => {
                 useProtectedWipe: true,
                 macOsUnlockCode: '23',
             })
+        })
+
+        it('should assign user to device', async () => {
+            const apiSpy = jest.spyOn(graphClient, 'api')
+            const postSpy = jest.spyOn(graphClient.api(''), 'post')
+            await devices.assignUserToDevice('id', 'userId')
+
+            expect(apiSpy).toHaveBeenCalledWith("/deviceManagement/managedDevices('id')/users/$ref")
+            expect(postSpy).toHaveBeenCalledWith({
+                '@odata.id': `https://graph.microsoft.com/beta/users/userId`,
+            })
+        })
+
+        it('should unassign user from device', async () => {
+            const apiSpy = jest.spyOn(graphClient, 'api')
+            const deleteSpy = jest.spyOn(graphClient.api(''), 'delete')
+            await devices.unassignUserFromDevice('id')
+
+            expect(apiSpy).toHaveBeenCalledWith("/deviceManagement/managedDevices('id')/users/$ref")
+            expect(deleteSpy).toHaveBeenCalled()
         })
     })
 })

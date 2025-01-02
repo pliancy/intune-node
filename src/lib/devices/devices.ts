@@ -1,5 +1,5 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { Device, ManagedDevice } from '@microsoft/microsoft-graph-types-beta'
+import { DetectedApp, Device, ManagedDevice } from '@microsoft/microsoft-graph-types-beta'
 
 export class Devices {
     constructor(private readonly graphClient: Client) {}
@@ -86,5 +86,36 @@ export class Devices {
         }
         if (macOsUnlockCode) body.macOsUnlockCode = macOsUnlockCode
         return this.graphClient.api(`/deviceManagement/managedDevices/${deviceId}/wipe`).post(body)
+    }
+
+    async listDetectedApps(deviceId: string): Promise<DetectedApp[]> {
+        let res = await this.graphClient
+            .api(`/deviceManagement/manageddevices('${deviceId}')/detectedApps`)
+            .get()
+
+        const detectedApps: DetectedApp[] = res.value
+
+        while (res['@odata.nextLink']) {
+            const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
+            res = await this.graphClient.api(nextLink).get()
+            const nextDetectedApps = res.value as DetectedApp[]
+            detectedApps.push(...nextDetectedApps)
+        }
+
+        return detectedApps
+    }
+
+    async assignUserToDevice(deviceId: string, userId: string): Promise<void> {
+        return this.graphClient
+            .api(`/deviceManagement/managedDevices('${deviceId}')/users/$ref`)
+            .post({
+                '@odata.id': `https://graph.microsoft.com/beta/users/${userId}`,
+            })
+    }
+
+    async unassignUserFromDevice(deviceId: string): Promise<void> {
+        return this.graphClient
+            .api(`/deviceManagement/managedDevices('${deviceId}')/users/$ref`)
+            .delete()
     }
 }
