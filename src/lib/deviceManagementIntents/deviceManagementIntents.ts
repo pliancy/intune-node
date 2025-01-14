@@ -7,7 +7,7 @@ export class DeviceManagementIntents {
 
     async list() {
         let res = await this.graphClient.api('/deviceManagement/intents').get()
-        const intents: Group[] = res.value
+        const intents: DeviceManagementIntent[] = res.value
         while (res['@odata.nextLink']) {
             const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
             res = await this.graphClient.api(nextLink).get()

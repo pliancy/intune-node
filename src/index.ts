@@ -12,4 +12,5 @@ export {
     GroupPolicyDefinitionValue,
     Group,
     DetectedApp,
+    DeviceManagementConfigurationPolicy,
 } from '@microsoft/microsoft-graph-types-beta'
