@@ -61,37 +61,139 @@ describe('Device Configuration Policies', () => {
         expect(result).toBeUndefined()
     })
 
-    it('should assign policy to group', async () => {
-        jest.spyOn(graphClient.api(''), 'post').mockResolvedValue(policyAssignment)
-        const spy = jest.spyOn(graphClient, 'api')
-        const result = await configurationPolicies.assignToGroup('id', 'groupId')
-        expect(result).toEqual(policyAssignment)
-        expect(spy).toHaveBeenCalledWith('/deviceManagement/configurationPolicies/id/assignments')
-    })
+    describe('setAssignments', () => {
+        it('should assign to all devices with exclusions', async () => {
+            const spy = jest.spyOn(graphClient.api(''), 'post')
 
-    it('should list policy assignments', async () => {
-        jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
-            value: [policyAssignment],
-            '@odata.nextLink': 'next',
+            await configurationPolicies.setAssignments('id', {
+                allDevices: true,
+                excludeGroups: ['group1', 'group2'],
+            })
+
+            expect(spy).toHaveBeenCalledWith({
+                assignments: [
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.allDevicesAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                        },
+                    },
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.exclusionGroupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group1',
+                        },
+                    },
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.exclusionGroupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group2',
+                        },
+                    },
+                ],
+            })
         })
-        jest.spyOn(graphClient.api(''), 'get').mockResolvedValueOnce({
-            value: [policyAssignment],
+
+        it('should assign to all licensed users', async () => {
+            const spy = jest.spyOn(graphClient.api(''), 'post')
+
+            await configurationPolicies.setAssignments('id', {
+                allUsers: true,
+            })
+
+            expect(spy).toHaveBeenCalledWith({
+                assignments: [
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.allLicensedUsersAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                        },
+                    },
+                ],
+            })
         })
 
-        const result = await configurationPolicies.listAssignments('id')
-        expect(result).toEqual([policyAssignment, policyAssignment])
-    })
+        it('should assign to specific included groups', async () => {
+            const spy = jest.spyOn(graphClient.api(''), 'post')
 
-    it('should get a policy assignment', async () => {
-        jest.spyOn(graphClient.api(''), 'get').mockResolvedValue(policyAssignment)
-        const result = await configurationPolicies.getAssignment('id', 'assignmentId')
-        expect(result).toEqual(policyAssignment)
-    })
+            await configurationPolicies.setAssignments('id', {
+                includeGroups: ['group1', 'group2'],
+            })
 
-    it('should delete a policy assignment', async () => {
-        jest.spyOn(graphClient.api(''), 'delete')
-        const result = await configurationPolicies.deleteAssignment('id', 'assignmentId')
-        expect(result).toBeUndefined()
+            expect(spy).toHaveBeenCalledWith({
+                assignments: [
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.groupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group1',
+                        },
+                    },
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.groupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group2',
+                        },
+                    },
+                ],
+            })
+        })
+
+        it('should throw error when including groups with allDevices', async () => {
+            await expect(
+                configurationPolicies.setAssignments('id', {
+                    allDevices: true,
+                    includeGroups: ['group1'],
+                }),
+            ).rejects.toThrow('Cannot include specific groups when allDevices is true')
+        })
+
+        it('should support mix of include and exclude groups', async () => {
+            const spy = jest.spyOn(graphClient.api(''), 'post')
+
+            await configurationPolicies.setAssignments('id', {
+                includeGroups: ['group1'],
+                excludeGroups: ['group2'],
+            })
+
+            expect(spy).toHaveBeenCalledWith({
+                assignments: [
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.groupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group1',
+                        },
+                    },
+                    {
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.exclusionGroupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId: 'group2',
+                        },
+                    },
+                ],
+            })
+        })
     })
 
     describe('pagination', () => {
@@ -109,26 +211,6 @@ describe('Device Configuration Policies', () => {
                 .mockResolvedValueOnce(secondPage)
 
             const result = await configurationPolicies.list()
-
-            expect(result).toHaveLength(2)
-            expect(result[0].id).toBe('1')
-            expect(result[1].id).toBe('2')
-        })
-
-        it('should handle pagination for listAssignments method', async () => {
-            const firstPage = {
-                value: [{ ...policyAssignment, id: '1' }],
-                '@odata.nextLink': 'https://graph.microsoft.com/beta/next-page',
-            }
-            const secondPage = {
-                value: [{ ...policyAssignment, id: '2' }],
-            }
-
-            jest.spyOn(graphClient.api(''), 'get')
-                .mockResolvedValueOnce(firstPage)
-                .mockResolvedValueOnce(secondPage)
-
-            const result = await configurationPolicies.listAssignments('id')
 
             expect(result).toHaveLength(2)
             expect(result[0].id).toBe('1')

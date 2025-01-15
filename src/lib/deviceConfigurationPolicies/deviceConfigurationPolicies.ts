@@ -1,6 +1,25 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { DeviceManagementConfigurationPolicy } from '@microsoft/microsoft-graph-types-beta'
 
+interface AssignmentTarget {
+    '@odata.type': string
+    deviceAndAppManagementAssignmentFilterType: 'none' | 'include' | 'exclude'
+    groupId?: string
+}
+
+interface Assignment {
+    id?: string
+    source?: 'direct'
+    target: AssignmentTarget
+}
+
+interface AssignmentOptions {
+    includeGroups?: string[]
+    excludeGroups?: string[]
+    allDevices?: boolean
+    allUsers?: boolean
+}
+
 export class DeviceConfigurationPolicies {
     constructor(private readonly graphClient: Client) {}
 
@@ -72,64 +91,81 @@ export class DeviceConfigurationPolicies {
     }
 
     /**
-     *  Create a group assignment
-     * @param id
-     * @param groupId
-     * @returns
+     * Set assignments for a configuration policy
+     *
+     * THIS WILL OVERWRITE ANY EXISTING ASSIGNMENTS!
+     * @param id - The ID of the configuration policy
+     * @param options - Assignment options including groups to include/exclude and whether to assign to all devices/users
+     * @returns Promise<void>
      */
-    async assignToGroup(id: string, groupId: string): Promise<any> {
-        return this.graphClient
-            .api(`/deviceManagement/configurationPolicies/${id}/assignments`)
-            .post({
-                '@odata.type': '#microsoft.graph.deviceManagementConfigurationPolicyAssignment',
+    async setAssignments(id: string, options: AssignmentOptions): Promise<void> {
+        const assignments: Assignment[] = []
+
+        // Add all devices assignment if specified
+        if (options.allDevices) {
+            assignments.push({
+                id: '',
+                source: 'direct',
                 target: {
-                    '@odata.type': '#microsoft.graph.groupAssignmentTarget',
-                    groupId: groupId,
+                    '@odata.type': '#microsoft.graph.allDevicesAssignmentTarget',
+                    deviceAndAppManagementAssignmentFilterType: 'none',
                 },
             })
-    }
 
-    /**
-     *  List all assignments
-     * @param id
-     * @returns
-     */
-    async listAssignments(id: string): Promise<any[]> {
-        let res = await this.graphClient
-            .api(`/deviceManagement/configurationPolicies/${id}/assignments`)
-            .get()
-
-        const assignments: any[] = res.value
-        while (res['@odata.nextLink']) {
-            const nextLink = res['@odata.nextLink'].replace('https://graph.microsoft.com/beta', '')
-            res = await this.graphClient.api(nextLink).get()
-            const nextAssignments = res.value
-            assignments.push(...nextAssignments)
+            // When all devices is selected, we can only have exclusion groups
+            if (options.includeGroups?.length) {
+                throw new Error('Cannot include specific groups when allDevices is true')
+            }
         }
 
-        return assignments
-    }
+        // Add all licensed users assignment if specified
+        if (options.allUsers) {
+            assignments.push({
+                id: '',
+                source: 'direct',
+                target: {
+                    '@odata.type': '#microsoft.graph.allLicensedUsersAssignmentTarget',
+                    deviceAndAppManagementAssignmentFilterType: 'none',
+                },
+            })
+        }
 
-    /**
-     *  Delete an assignment
-     * @param id
-     * @param assignmentId
-     */
-    async deleteAssignment(id: string, assignmentId: string): Promise<void> {
+        // Add included groups
+        if (options.includeGroups?.length) {
+            assignments.push(
+                ...options.includeGroups.map(
+                    (groupId): Assignment => ({
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.groupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId,
+                        },
+                    }),
+                ),
+            )
+        }
+
+        // Add excluded groups
+        if (options.excludeGroups?.length) {
+            assignments.push(
+                ...options.excludeGroups.map(
+                    (groupId): Assignment => ({
+                        id: '',
+                        source: 'direct',
+                        target: {
+                            '@odata.type': '#microsoft.graph.exclusionGroupAssignmentTarget',
+                            deviceAndAppManagementAssignmentFilterType: 'none',
+                            groupId,
+                        },
+                    }),
+                ),
+            )
+        }
+
         await this.graphClient
-            .api(`/deviceManagement/configurationPolicies/${id}/assignments/${assignmentId}`)
-            .delete()
-    }
-
-    /**
-     *  Get an assignment
-     * @param id
-     * @param assignmentId
-     * @returns
-     */
-    async getAssignment(id: string, assignmentId: string): Promise<any> {
-        return this.graphClient
-            .api(`/deviceManagement/configurationPolicies/${id}/assignments/${assignmentId}`)
-            .get()
+            .api(`/deviceManagement/configurationPolicies('${id}')/assign`)
+            .post({ assignments })
     }
 }
