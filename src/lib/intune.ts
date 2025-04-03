@@ -14,6 +14,7 @@ import { DeviceManagementIntents } from './deviceManagementIntents/deviceManagem
 import { DeviceHealthScripts } from './deviceHealthScripts/deviceHealthScripts'
 import { AuthProvider } from './utils/auth-provider'
 import { DeviceConfigurationPolicies } from './deviceConfigurationPolicies/deviceConfigurationPolicies'
+import { DeviceShellScripts } from './deviceShellScripts/deviceShellScripts'
 require('isomorphic-fetch')
 
 export class Intune {
@@ -45,6 +46,8 @@ export class Intune {
 
     readonly deviceConfigurationPolicies: DeviceConfigurationPolicies
 
+    readonly deviceShellScripts: DeviceShellScripts
+
     private readonly authProvider: AuthProvider
 
     constructor(private readonly config: Config) {
@@ -68,6 +71,7 @@ export class Intune {
         this.deviceManagementIntents = new DeviceManagementIntents(this.graphclient)
         this.deviceHealthScripts = new DeviceHealthScripts(this.graphclient)
         this.deviceConfigurationPolicies = new DeviceConfigurationPolicies(this.graphclient)
+        this.deviceShellScripts = new DeviceShellScripts(this.graphclient)
     }
 
     /**
