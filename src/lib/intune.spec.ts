@@ -10,6 +10,7 @@ import { DeviceManagementTemplates } from './deviceManagementTemplates/deviceMan
 import { DeviceManagementIntents } from './deviceManagementIntents/deviceManagementIntents'
 import { Autopilot } from './autopilot/autopilot'
 import { DeviceConfigurationPolicies } from './deviceConfigurationPolicies/deviceConfigurationPolicies'
+import { DeviceShellScripts } from './deviceShellScripts/deviceShellScripts'
 
 jest.mock('./utils/auth-provider.ts', () => {
     return {
@@ -39,6 +40,7 @@ describe('Intune', () => {
         expect(intune.deviceManagementIntents).toBeInstanceOf(DeviceManagementIntents)
         expect(intune.autopilot).toBeInstanceOf(Autopilot)
         expect(intune.deviceConfigurationPolicies).toBeInstanceOf(DeviceConfigurationPolicies)
+        expect(intune.deviceShellScripts).toBeInstanceOf(DeviceShellScripts)
     })
 
     // Test for the refreshToken getter
