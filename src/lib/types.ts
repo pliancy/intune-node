@@ -27,6 +27,28 @@ export interface DeviceManagementScript extends Graph.DeviceManagementScript {
     '@odata.type': string
 }
 
+export interface DeviceShellScript extends Graph.DeviceShellScript {
+    '@odata.type': string
+}
+
+export interface DeviceManagementScriptAssignment extends Graph.DeviceManagementScriptAssignment {
+    '@odata.type': string
+}
+
+export interface DeviceManagementScriptGroupAssignment
+    extends Graph.DeviceManagementScriptGroupAssignment {
+    '@odata.type': string
+}
+
+export interface DeviceShellScriptAssignment extends Graph.DeviceManagementScriptAssignment {
+    '@odata.type': string
+}
+
+export interface DeviceShellScriptGroupAssignment
+    extends Graph.DeviceManagementScriptGroupAssignment {
+    '@odata.type': string
+}
+
 export interface MobileAppContentFile extends Graph.MobileAppContentFile {
     '@odata.type': '#microsoft.graph.mobileAppContentFile'
     size: number
