@@ -1095,10 +1095,10 @@
     "@babel/runtime" "^7.12.5"
     tslib "^2.2.0"
 
-"@microsoft/microsoft-graph-types-beta@0.40.0-preview":
-  version "0.40.0-preview"
-  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-types-beta/-/microsoft-graph-types-beta-0.40.0-preview.tgz#a5f79e5073e2d737794aca1322ccf9b43fed07de"
-  integrity sha512-jkEnQN3g/nBLA+JweeUtLwoilbA3XmY65jDwBLh1LGzDjw3ku5D4rNhI4q/70xLSBNFXllPIZWXcqI3VShkO+Q==
+"@microsoft/microsoft-graph-types-beta@0.43.0-preview":
+  version "0.43.0-preview"
+  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-types-beta/-/microsoft-graph-types-beta-0.43.0-preview.tgz#7daf1cf8b87c804743bbd866284514e5c894afee"
+  integrity sha512-HngQCu0Mt4r+nqdBNx3OqUgFwkgw1XI1y2SOTGTJmeUBbIKZdTJbEH7X81uNGQDllEcSGtUOmLNv54yD35pORg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

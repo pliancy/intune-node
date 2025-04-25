@@ -168,10 +168,6 @@ export interface MobileAppSupersedence extends Graph.MobileAppSupersedence {
 
 export type MobileAppRelationship = MobileAppDependency | MobileAppSupersedence
 
-export interface MobileAppAssignment extends Graph.MobileAppAssignment {
-    '@odata.type': '#microsoft.graph.mobileAppAssignment'
-}
-
 export interface DeviceManagementTemplate extends Graph.DeviceManagementTemplate {
     '@odata.type': '#microsoft.graph.deviceManagementTemplate'
 }
@@ -201,4 +197,40 @@ export interface DeviceHealthScript extends Graph.DeviceHealthScript {
 
 export interface DeviceHealthScriptAssignment extends Graph.DeviceHealthScriptAssignment {
     '@odata.type': '#microsoft.graph.deviceHealthScriptAssignment'
+}
+
+export interface GroupMember {
+    id: string
+    mail: string
+    mailEnabled: boolean
+    mailNickname: string
+    securityEnabled: boolean
+}
+
+export interface MobileAppAssignment {
+    '@odata.type': '#microsoft.graph.mobileAppAssignment'
+    id?: string
+    intent: 'required' | 'available' | 'uninstall' | 'availableWithoutEnrollment'
+    source?: 'direct' | string
+    sourceId?: string | null
+    target: {
+        '@odata.type':
+            | '#microsoft.graph.groupAssignmentTarget'
+            | '#microsoft.graph.allLicensedUsersAssignmentTarget'
+            | '#microsoft.graph.allDevicesAssignmentTarget'
+        deviceAndAppManagementAssignmentFilterId?: string | null
+        deviceAndAppManagementAssignmentFilterType?: string
+        /**
+         * Only required for groupAssignmentTarget
+         */
+        groupId?: string
+    }
+    settings: {
+        '@odata.type': '#microsoft.graph.win32LobAppAssignmentSettings'
+        notifications: 'hideAll' | 'showAll'
+        installTimeSettings?: any | null
+        restartSettings?: any | null
+        deliveryOptimizationPriority: 'notConfigured' | string
+        autoUpdateSettings?: any | null
+    }
 }
