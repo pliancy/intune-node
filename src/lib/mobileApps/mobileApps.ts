@@ -283,6 +283,12 @@ export class MobileApps {
             .delete()
     }
 
+    async removeAllAppRelationships(appId: string): Promise<void> {
+        await this.graphClient
+            .api(`/deviceAppManagement/mobileApps/${appId}/updateRelationships`)
+            .post({ relationships: [] })
+    }
+
     async updateAppRelationship(
         appId: string,
         relationshipId: string,
