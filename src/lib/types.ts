@@ -40,13 +40,12 @@ export interface DeviceManagementScriptGroupAssignment
     '@odata.type': string
 }
 
-export interface DeviceShellScriptAssignment extends Graph.DeviceManagementScriptAssignment {
-    '@odata.type': string
-}
-
-export interface DeviceShellScriptGroupAssignment
-    extends Graph.DeviceManagementScriptGroupAssignment {
-    '@odata.type': string
+export interface DeviceShellScriptAssignment {
+    '@odata.type':
+        | '#microsoft.graph.groupAssignmentTarget'
+        | '#microsoft.graph.allDevicesAssignmentTarget'
+        | '#microsoft.graph.allLicensedUsersAssignmentTarget'
+    groupId?: string
 }
 
 export interface MobileAppContentFile extends Graph.MobileAppContentFile {
