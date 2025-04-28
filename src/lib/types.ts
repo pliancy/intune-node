@@ -40,11 +40,11 @@ export interface DeviceManagementScriptGroupAssignment
     '@odata.type': string
 }
 
-
-
-export interface DeviceShellScriptAssignment
- {
-    '@odata.type': "#microsoft.graph.groupAssignmentTarget"| "#microsoft.graph.allDevicesAssignmentTarget" | "#microsoft.graph.allLicensedUsersAssignmentTarget"
+export interface DeviceShellScriptAssignment {
+    '@odata.type':
+        | '#microsoft.graph.groupAssignmentTarget'
+        | '#microsoft.graph.allDevicesAssignmentTarget'
+        | '#microsoft.graph.allLicensedUsersAssignmentTarget'
     groupId?: string
 }
 

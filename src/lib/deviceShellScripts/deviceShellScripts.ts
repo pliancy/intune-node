@@ -1,8 +1,5 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import {
-    DeviceShellScript,
-    DeviceShellScriptAssignment,
-} from '../types'
+import { DeviceShellScript, DeviceShellScriptAssignment } from '../types'
 
 export class DeviceShellScripts {
     constructor(private readonly graphClient: Client) {}
@@ -73,15 +70,11 @@ export class DeviceShellScripts {
      * @param id The ID of the device shell script
      * @param assignments The complete set of assignments to apply
      */
-    async setAssignment(
-        id: string,
-        assignments: DeviceShellScriptAssignment[]
-    ): Promise<void> {
+    async setAssignment(id: string, assignments: DeviceShellScriptAssignment[]): Promise<void> {
         await this.graphClient
             .api(`/deviceManagement/DeviceShellScripts/${id}/assign`)
-            .post({deviceManagementScriptAssignments: assignments.map(a => ({ target: a }))})
+            .post({ deviceManagementScriptAssignments: assignments.map((a) => ({ target: a })) })
     }
-
 
     /**
      * THIS WILL OVERWRITE ANY EXISTING ASSIGNMENTS!
@@ -90,9 +83,11 @@ export class DeviceShellScripts {
      * @param id The ID of the device shell script
      */
     async setAllDevicesAssignment(id: string): Promise<void> {
-        await this.setAssignment(id, [{
-            '@odata.type': '#microsoft.graph.allDevicesAssignmentTarget',
-        }])
+        await this.setAssignment(id, [
+            {
+                '@odata.type': '#microsoft.graph.allDevicesAssignmentTarget',
+            },
+        ])
     }
 
     /**
@@ -102,9 +97,10 @@ export class DeviceShellScripts {
      * @param id The ID of the device shell script
      */
     async setAllUsersAssignment(id: string): Promise<void> {
-        await this.setAssignment(id, [{
-            '@odata.type': '#microsoft.graph.allLicensedUsersAssignmentTarget',
-        } ])
+        await this.setAssignment(id, [
+            {
+                '@odata.type': '#microsoft.graph.allLicensedUsersAssignmentTarget',
+            },
+        ])
     }
-
 }

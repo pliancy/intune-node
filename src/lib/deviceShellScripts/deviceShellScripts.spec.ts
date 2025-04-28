@@ -93,6 +93,4 @@ describe('DeviceShellScripts', () => {
             expect(deleteSpy).toHaveBeenCalled()
         })
     })
-
-   
 })
