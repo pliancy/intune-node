@@ -8,19 +8,21 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write # Required for npm Trusted Publishing
+      pull-requests: read
+      statuses: write
+      id-token: write # Required for npm Trusted Publishing
     env:
       HUSKY: 0
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PLIBOT_PAT }}
-          ref: main
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 20
+          node-version: 26.13.1
       - name: Install dependencies
         run: yarn
       - name: Build
@@ -35,10 +37,20 @@ jobs:
           cp dist/package.json .
           npx pinst --enable
       # Commit changes to package.json and README.md
+
+      # Generate a temporary app token so we can write the new version back
+      - name: Generate scoped GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
+        with:
+          client-id: ${{ vars.RELEASE_WRITE_BACK_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_WRITE_BACK_PRIVATE_KEY }}
+
       - name: Auto Commit
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         env:
           SKIP_COMMITIZEN: true
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           # Optional, but recommended
           # Defaults to "Apply automatic changes"
