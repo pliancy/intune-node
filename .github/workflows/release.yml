@@ -54,7 +54,7 @@ jobs:
 
       # Commit changes to package.json and README.md
       - name: Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
+        uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7
         env:
           SKIP_COMMITIZEN: true
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
