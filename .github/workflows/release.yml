@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
       issues: write # Required for npm Trusted Publishing
-      pull-requests: read
+      pull-requests: write
       statuses: write
       id-token: write # Required for npm Trusted Publishing
     env:
