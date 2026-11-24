@@ -18,7 +18,7 @@ import { DeviceShellScripts } from './deviceShellScripts/deviceShellScripts'
 require('isomorphic-fetch')
 
 export class Intune {
-    readonly graphclient: Client
+    readonly graphClient: Client
 
     readonly autopilot: Autopilot
 
@@ -53,25 +53,25 @@ export class Intune {
     constructor(private readonly config: Config) {
         this.authProvider = new AuthProvider(this.config)
 
-        this.graphclient = Client.initWithMiddleware({
+        this.graphClient = Client.initWithMiddleware({
             authProvider: this.authProvider,
             defaultVersion: 'beta',
         })
 
-        this.devices = new Devices(this.graphclient)
-        this.deviceConfigurations = new DeviceConfigurations(this.graphclient)
-        this.deviceManagementScripts = new DeviceManagementScripts(this.graphclient)
-        this.mobileApps = new MobileApps(this.graphclient)
-        this.groups = new Groups(this.graphclient)
-        this.groupPolicyConfigurations = new GroupPolicyConfigurations(this.graphclient)
-        this.users = new Users(this.graphclient)
-        this.customRequest = new CustomRequest(this.graphclient)
-        this.autopilot = new Autopilot(this.graphclient)
-        this.deviceManagementTemplates = new DeviceManagementTemplates(this.graphclient)
-        this.deviceManagementIntents = new DeviceManagementIntents(this.graphclient)
-        this.deviceHealthScripts = new DeviceHealthScripts(this.graphclient)
-        this.deviceConfigurationPolicies = new DeviceConfigurationPolicies(this.graphclient)
-        this.deviceShellScripts = new DeviceShellScripts(this.graphclient)
+        this.devices = new Devices(this.graphClient)
+        this.deviceConfigurations = new DeviceConfigurations(this.graphClient)
+        this.deviceManagementScripts = new DeviceManagementScripts(this.graphClient)
+        this.mobileApps = new MobileApps(this.graphClient)
+        this.groups = new Groups(this.graphClient)
+        this.groupPolicyConfigurations = new GroupPolicyConfigurations(this.graphClient)
+        this.users = new Users(this.graphClient)
+        this.customRequest = new CustomRequest(this.graphClient)
+        this.autopilot = new Autopilot(this.graphClient)
+        this.deviceManagementTemplates = new DeviceManagementTemplates(this.graphClient)
+        this.deviceManagementIntents = new DeviceManagementIntents(this.graphClient)
+        this.deviceHealthScripts = new DeviceHealthScripts(this.graphClient)
+        this.deviceConfigurationPolicies = new DeviceConfigurationPolicies(this.graphClient)
+        this.deviceShellScripts = new DeviceShellScripts(this.graphClient)
     }
 
     /**
