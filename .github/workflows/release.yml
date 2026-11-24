@@ -16,14 +16,8 @@ jobs:
       id-token: write # Required for npm Trusted Publishing
     env:
       HUSKY: 0
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-          ref: main
 
+    steps:
       # Generate a temporary app token for release and new version back
       - name: Generate scoped GitHub App token
         id: app-token
@@ -31,6 +25,13 @@ jobs:
         with:
           client-id: ${{ vars.RELEASE_WRITE_BACK_CLIENT_ID }}
           private-key: ${{ secrets.RELEASE_WRITE_BACK_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -54,10 +55,9 @@ jobs:
 
       # Commit changes to package.json and README.md
       - name: Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
+        uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7.2.1
         env:
           SKIP_COMMITIZEN: true
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           # Optional, but recommended
           # Defaults to "Apply automatic changes"
