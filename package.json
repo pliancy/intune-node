@@ -43,7 +43,7 @@
     "@semantic-release/npm": "13.2.0",
     "@types/isomorphic-fetch": "0.0.39",
     "@types/jest": "29.5.14",
-    "@types/node": "22.14.0",
+    "@types/node": "26.6.11",
     "@types/qs": "6.9.18",
     "commitizen": "4.3.1",
     "concurrently": "9.1.2",
